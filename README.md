@@ -4,7 +4,7 @@ Express on AWS Lambda toolkit
 
 ## ℹ️ Overview
 
-Encapsulates KnowDev opinions on JSON:API, logging, and debugging
+Encapsulates project opinions on JSON:API, logging, and debugging
 
 * `projectHandler()` function should wrap all routes
 * The handler will bootstrap logging provided by `@knowdev/log`
@@ -21,7 +21,7 @@ npm install --save @knowdev/express
 
 ### Environment Variables
 
-For [@knowdev/log](https://github.com/nullfame/knowdev-log)):
+For [@knowdev/log](https://github.com/nullfame/knowdev-log):
 
 ``` bash
 LOG_LEVEL=all|trace|*debug*|info|warn|error|fatal|silent
