@@ -12,6 +12,7 @@
     "test": "jest src/",
     "test:clean": "rimraf coverage/",
     "test:coverage": "jest --coverage src/",
+    "test:spec:echo.route": "jest src/routes/__tests__/echo.route.spec.js",
     "postversion": "npm publish"
   },
   "dependencies": {
