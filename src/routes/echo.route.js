@@ -1,5 +1,3 @@
-const log = require("@knowdev/log");
-
 const bodyParser = require("body-parser");
 const express = require("express");
 const { getCurrentInvoke } = require("@vendia/serverless-express");
