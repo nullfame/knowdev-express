@@ -6,7 +6,7 @@ const router = require("../echo.route");
 
 //
 //
-// Setup
+// Configuration
 //
 
 expect.extend(matchers);
