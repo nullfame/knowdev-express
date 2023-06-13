@@ -33,4 +33,13 @@ describe("Project handler function", () => {
     expect(projectHandler).toBeDefined();
     expect(projectHandler).toBeFunction();
   });
+  it("Will call a function I pass it", () => {
+    const mockFunction = jest.fn();
+    const handler = projectHandler(mockFunction);
+    const req = {};
+    const res = {};
+    const next = () => {};
+    handler(req, res, next);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+  });
 });
