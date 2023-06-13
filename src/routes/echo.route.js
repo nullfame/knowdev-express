@@ -55,7 +55,6 @@ router.all(
     // Respond as JSON
     //
 
-    log.var({ response });
     res.json(response);
   })
 );

@@ -1,8 +1,6 @@
 const { UnhandledError } = require("@knowdev/errors");
 const log = require("@knowdev/log");
 
-const summarizeResponse = require("./summarizeResponse.function");
-
 //
 //
 // Function Definition
