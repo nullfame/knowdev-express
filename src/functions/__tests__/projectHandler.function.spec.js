@@ -1,4 +1,32 @@
+const { matchers } = require("jest-json-schema");
+
 const projectHandler = require("../projectHandler.function");
+
+//
+//
+// Configuration
+//
+
+expect.extend(matchers);
+
+const jsonApiErrorSchema = {
+  type: "object",
+  properties: {
+    errors: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          status: { type: "number" },
+          title: { type: "string" },
+          detail: { type: "string" },
+        },
+        required: ["status", "title"],
+      },
+    },
+  },
+  required: ["errors"],
+};
 
 //
 //
@@ -41,5 +69,25 @@ describe("Project handler function", () => {
     const next = () => {};
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
+  });
+  it("Will catch an unhandled thrown error", () => {
+    const mockFunction = jest.fn(() => {
+      throw new Error("test");
+    });
+    const handler = projectHandler(mockFunction);
+    const req = {};
+    const res = {
+      json: jest.fn(),
+      status: jest.fn(() => res),
+    };
+    const next = () => {};
+    handler(req, res, next);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(res.json).toHaveBeenCalledTimes(1);
+    const response = res.json.mock.calls[0][0];
+    expect(response).toMatchSchema(jsonApiErrorSchema);
+    expect(response.errors[0].status).toBe(500);
+    // The response title will be "Internal Application Error" but we don't want to test that here
+    // expect(response.errors[0].title).toBe("Internal Application Error");
   });
 });
