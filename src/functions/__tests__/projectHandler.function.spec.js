@@ -77,15 +77,16 @@ describe("Project handler function", () => {
     });
     const handler = projectHandler(mockFunction);
     const req = {};
+    const mockResJson = jest.fn();
     const res = {
-      json: jest.fn(),
+      json: mockResJson,
       status: jest.fn(() => res),
     };
     const next = () => {};
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
-    expect(res.json).toHaveBeenCalledTimes(1);
-    const response = res.json.mock.calls[0][0];
+    expect(mockResJson).toHaveBeenCalledTimes(1);
+    const response = mockResJson.mock.calls[0][0];
     expect(response).toMatchSchema(jsonApiErrorSchema);
     expect(response.errors[0].status).toBe(500);
     // The response title will be "Internal Application Error" but we don't want to test that here
@@ -98,15 +99,16 @@ describe("Project handler function", () => {
     });
     const handler = projectHandler(mockFunction);
     const req = {};
+    const mockResJson = jest.fn();
     const res = {
-      json: jest.fn(),
+      json: mockResJson,
       status: jest.fn(() => res),
     };
     const next = () => {};
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
-    expect(res.json).toHaveBeenCalledTimes(1);
-    const response = res.json.mock.calls[0][0];
+    expect(mockResJson).toHaveBeenCalledTimes(1);
+    const response = mockResJson.mock.calls[0][0];
     expect(response).toMatchSchema(jsonApiErrorSchema);
     expect(response.errors[0].status).toBe(404);
   });
