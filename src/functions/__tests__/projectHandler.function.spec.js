@@ -66,7 +66,9 @@ describe("Project handler function", () => {
     const mockFunction = jest.fn();
     const handler = projectHandler(mockFunction);
     const req = {};
-    const res = {};
+    const res = {
+      on: jest.fn(),
+    };
     const next = () => {};
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
@@ -80,6 +82,7 @@ describe("Project handler function", () => {
     const mockResJson = jest.fn();
     const res = {
       json: mockResJson,
+      on: jest.fn(),
       status: jest.fn(() => res),
     };
     const next = () => {};
@@ -102,6 +105,7 @@ describe("Project handler function", () => {
     const mockResJson = jest.fn();
     const res = {
       json: mockResJson,
+      on: jest.fn(),
       status: jest.fn(() => res),
     };
     const next = () => {};
