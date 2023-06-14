@@ -73,7 +73,7 @@ describe("Project handler function", () => {
   });
   it("Will catch an unhandled thrown error", () => {
     const mockFunction = jest.fn(() => {
-      throw new Error("test");
+      throw new Error("Sorpresa!");
     });
     const handler = projectHandler(mockFunction);
     const req = {};
