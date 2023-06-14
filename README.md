@@ -8,6 +8,8 @@ Encapsulates project opinions on JSON:API, logging, and debugging
 
 * `projectHandler()` function should wrap all routes
 * The handler will bootstrap logging provided by `@knowdev/log`
+* The inbound request will be logged
+* The outbound response will be logged
 * The handler will catch any `@knowdev/errors` and respond properly
 * The handler will catch any uncaught errors and respond with a `500` (from `@knowdev/errors`)
 
