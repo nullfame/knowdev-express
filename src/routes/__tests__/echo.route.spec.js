@@ -1,3 +1,6 @@
+const HTTP = require("@knowdev/http");
+const { InternalError, UnhandledError } = require("@knowdev/errors");
+
 const express = require("express");
 const { matchers } = require("jest-json-schema");
 const request = require("supertest");
@@ -28,6 +31,25 @@ const schema = {
       required: ["baseUrl"],
     },
   },
+};
+
+const jsonApiErrorSchema = {
+  type: "object",
+  properties: {
+    errors: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          status: { type: "number" },
+          title: { type: "string" },
+          detail: { type: "string" },
+        },
+        required: ["status", "title"],
+      },
+    },
+  },
+  required: ["errors"],
 };
 
 //
@@ -112,15 +134,66 @@ describe("Express Backend", () => {
       });
     });
     describe("Special case routes", () => {
-      it.todo("Responds with a 400");
-      it.todo("Responds with a 403");
-      it.todo("Responds with a 404");
-      it.todo("Responds with a 418");
-      it.todo("Responds with a 500 Internal Error");
-      it.todo("Responds with a 500 Unhandled Error");
-      it.todo("Responds with a 502");
-      it.todo("Responds with a 503");
-      it.todo("Responds with a 504");
+      it("Responds with a 400", async () => {
+        const res = await request(route).get("/error/400");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.BAD_REQUEST);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 403", async () => {
+        const res = await request(route).get("/error/403");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.FORBIDDEN);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 404", async () => {
+        const res = await request(route).get("/error/404");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.NOT_FOUND);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 418", async () => {
+        const res = await request(route).get("/error/418");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.TEAPOT);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 500 Internal Error", async () => {
+        const res = await request(route).get("/error/500");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.INTERNAL_ERROR);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+        const sample = new InternalError();
+        expect(res.body.errors[0].title).toEqual(sample.title);
+        expect(res.body.errors[0].detail).toEqual(sample.detail);
+      });
+      it("Responds with a 500 Unhandled Error", async () => {
+        const res = await request(route).get("/error/unhandled");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.INTERNAL_ERROR);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+        const sample = new UnhandledError();
+        expect(res.body.errors[0].title).toEqual(sample.title);
+        expect(res.body.errors[0].detail).toEqual(sample.detail);
+      });
+      it("Responds with a 502", async () => {
+        const res = await request(route).get("/error/502");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.BAD_GATEWAY);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 503", async () => {
+        const res = await request(route).get("/error/503");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.UNAVAILABLE);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+      it("Responds with a 504", async () => {
+        const res = await request(route).get("/error/504");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.GATEWAY_TIMEOUT);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
     });
   });
 });

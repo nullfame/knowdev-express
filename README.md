@@ -101,8 +101,19 @@ app.use("/echo", echoRoute);
 app.use("/echo/*", echoRoute);
 ```
 
-Responds by echoing back details of your original submission, helpful for debugging
+Responds by echoing back details of your original submission, helpful for debugging. Some special routes return special messages:
 
+| Route             | Response |
+| ----------------- | -------- |
+| `error/400`       | Bad request error |
+| `error/403`       | Forbidden error |
+| `error/404`       | Not found error |
+| `error/500`       | Internal error |
+| `error/502`       | Bad gateway error |
+| `error/503`       | Unavailable error |
+| `error/504`       | Gateway timeout error |
+| `error/unhandled` | Unhandled error |
+| `error/*`         | Not found error |
 ### Functions
 
 #### summarizeRequest

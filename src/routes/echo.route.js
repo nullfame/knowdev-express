@@ -1,3 +1,14 @@
+const {
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  TeapotError,
+  BadGatewayError,
+  UnavailableError,
+  GatewayTimeoutError,
+  InternalError,
+} = require("@knowdev/errors");
+
 const bodyParser = require("body-parser");
 const express = require("express");
 const { getCurrentInvoke } = require("@vendia/serverless-express");
@@ -14,6 +25,82 @@ const router = express.Router();
 
 // Body parser
 router.use(bodyParser.text({ type: "*/*" }));
+
+//
+//
+// Error Routes
+//
+
+router.all(
+  "/error/400",
+  projectHandler(() => {
+    throw new BadRequestError();
+  })
+);
+
+router.all(
+  "/error/403",
+  projectHandler(() => {
+    throw new ForbiddenError();
+  })
+);
+
+router.all(
+  "/error/404",
+  projectHandler(() => {
+    throw new NotFoundError();
+  })
+);
+
+router.all(
+  "/error/418",
+  projectHandler(() => {
+    throw new TeapotError();
+  })
+);
+
+router.all(
+  "/error/500",
+  projectHandler(() => {
+    throw new InternalError();
+  })
+);
+
+router.all(
+  "/error/502",
+  projectHandler(() => {
+    throw new BadGatewayError();
+  })
+);
+
+router.all(
+  "/error/503",
+  projectHandler(() => {
+    throw new UnavailableError();
+  })
+);
+
+router.all(
+  "/error/504",
+  projectHandler(() => {
+    throw new GatewayTimeoutError();
+  })
+);
+
+router.all(
+  "/error/unhandled",
+  projectHandler(() => {
+    throw new Error("Mock Unhandled Exception");
+  })
+);
+
+// Last error catch all route
+router.all(
+  "/error/*",
+  projectHandler(() => {
+    throw new NotFoundError();
+  })
+);
 
 //
 //
