@@ -114,6 +114,9 @@ Responds by echoing back details of your original submission, helpful for debugg
 | `error/504`       | Gateway timeout error |
 | `error/unhandled` | Unhandled error |
 | `error/*`         | Not found error |
+
+Note these error routes are in addition to the path you may be using to specify the echo route. If you follow the above example of using `/echo/*`, your full route would be `/echo/error/503`
+
 ### Functions
 
 #### summarizeRequest
