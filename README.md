@@ -126,6 +126,16 @@ const { summarizeRequest } = require("@knowdev/express");
 log.var({ req: summarizeRequest(req) })
 ```
 
+#### summarizeResponse
+
+Summarizes the response, for the debugging.  Used in logging
+
+``` javascript
+const { summarizeResponse } = require("@knowdev/express");
+
+log.var({ res: summarizeResponse(res) })
+```
+
 ## 📝 Changelog
 
 * v0.1.0: fork from separate project (echoRoute, log, projectHandler, summarizeRequest)
