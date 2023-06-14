@@ -111,5 +111,16 @@ describe("Express Backend", () => {
         expect(res.body.req.body).toEqual(TEST.BODY.STRING);
       });
     });
+    describe("Special case routes", () => {
+      it.todo("Responds with a 400");
+      it.todo("Responds with a 403");
+      it.todo("Responds with a 404");
+      it.todo("Responds with a 418");
+      it.todo("Responds with a 500 Internal Error");
+      it.todo("Responds with a 500 Unhandled Error");
+      it.todo("Responds with a 502");
+      it.todo("Responds with a 503");
+      it.todo("Responds with a 504");
+    });
   });
 });
