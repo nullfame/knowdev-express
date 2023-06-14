@@ -3,14 +3,13 @@
 // Function Definition
 //
 
-function summarizeResponse(res) {
+function summarizeResponse(res, extras) {
   console.log("res :>> ", res);
   return {
-    body: res.body,
-    taco: "hi",
-    locals: res.locals,
+    headers: res.getHeaders(),
     statusCode: res.statusCode,
     statusMessage: res.statusMessage,
+    ...extras,
   };
 }
 
