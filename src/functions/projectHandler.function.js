@@ -1,5 +1,6 @@
 const { UnhandledError } = require("@knowdev/errors");
 const log = require("@knowdev/log");
+const summarizeRequest = require("./summarizeRequest.function");
 
 //
 //
@@ -11,6 +12,7 @@ function projectHandler(handler) {
   return (req, res, next, ...params) => {
     try {
       log.trace("Handler call");
+      log.info.var({ req: summarizeRequest(req) });
       handler(req, res, ...params);
       log.trace("Handler exit");
     } catch (error) {
