@@ -138,6 +138,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v0.2.0: Logging, special echo routes, summarize response
 * v0.1.0: fork from separate project (echoRoute, log, projectHandler, summarizeRequest)
 
 ## 🛣 Roadmap
