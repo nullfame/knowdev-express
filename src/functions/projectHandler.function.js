@@ -9,11 +9,10 @@ const summarizeResponse = require("./summarizeResponse.function");
 //
 
 function projectHandler(handler) {
-  log.trace("Project logging in trace mode");
   return (req, res, next, ...params) => {
+    log.trace("Project logging in trace mode");
     try {
       // Log request
-      log.trace("Handler call");
       log.info.var({ req: summarizeRequest(req) });
 
       // Save the original res.json()
@@ -33,9 +32,8 @@ function projectHandler(handler) {
       });
 
       // Invoke handler
+      log.trace("Handler call");
       handler(req, res, ...params);
-
-      // Log response
       log.trace("Handler exit");
     } catch (error) {
       // if project error
