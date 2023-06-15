@@ -7,6 +7,7 @@ const {
   UnavailableError,
   GatewayTimeoutError,
   InternalError,
+  UnauthorizedError,
 } = require("@knowdev/errors");
 
 const bodyParser = require("body-parser");
@@ -35,6 +36,13 @@ router.all(
   "/error/400",
   projectHandler(() => {
     throw new BadRequestError();
+  })
+);
+
+router.all(
+  "/error/401",
+  projectHandler(() => {
+    throw new UnauthorizedError();
   })
 );
 

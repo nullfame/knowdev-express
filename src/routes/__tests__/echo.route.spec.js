@@ -140,6 +140,12 @@ describe("Express Backend", () => {
         expect(res.statusCode).toEqual(HTTP.CODE.BAD_REQUEST);
         expect(res.body).toMatchSchema(jsonApiErrorSchema);
       });
+      it("Responds with a 401", async () => {
+        const res = await request(route).get("/error/401");
+        // Validate the response
+        expect(res.statusCode).toEqual(HTTP.CODE.UNAUTHORIZED);
+        expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
       it("Responds with a 403", async () => {
         const res = await request(route).get("/error/403");
         // Validate the response
