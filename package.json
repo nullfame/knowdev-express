@@ -12,6 +12,7 @@
     "test": "jest src/",
     "test:clean": "rimraf coverage/",
     "test:coverage": "jest --coverage src/",
+    "test:spec:decorateResponse.util": "jest ./src/util/__tests__/decorateResponse.util.spec.js",
     "test:spec:echo.route": "jest src/routes/__tests__/echo.route.spec.js",
     "test:spec:projectHandler.function": "jest src/functions/__tests__/projectHandler.function.spec.js",
     "postversion": "npm publish"
