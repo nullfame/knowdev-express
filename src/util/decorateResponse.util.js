@@ -25,30 +25,37 @@ const decorateResponse = (res) => {
     return; // eslint-disable-line no-useless-return
   }
 
-  //
-  //
-  // Setup
-  //
+  try {
+    //
+    //
+    // Setup
+    //
+    log.trace("Decorating response");
 
-  //
-  //
-  // Preprocess
-  //
+    //
+    //
+    // Preprocess
+    //
 
-  //
-  //
-  // Process
-  //
+    //
+    //
+    // Process
+    //
+    res.set("X-Powered-By", "KnowDev");
 
-  //
-  //
-  // Postprocess
-  //
+    //
+    //
+    // Postprocess
+    //
 
-  //
-  //
-  // Return
-  //
+    //
+    //
+    // Error Handling
+    //
+  } catch (error) {
+    log.warn("decorateResponse caught an internal error");
+    log.var({ error });
+  }
 };
 
 //
