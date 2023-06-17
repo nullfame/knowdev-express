@@ -1,7 +1,7 @@
 const { UnhandledError } = require("@knowdev/errors");
 const log = require("@knowdev/log");
-const summarizeRequest = require("./summarizeRequest.function");
-const summarizeResponse = require("./summarizeResponse.function");
+const summarizeRequest = require("../util/summarizeRequest.util");
+const summarizeResponse = require("../util/summarizeResponse.util");
 
 //
 //
