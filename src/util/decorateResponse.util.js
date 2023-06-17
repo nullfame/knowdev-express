@@ -21,7 +21,7 @@ const decorateResponse = (res) => {
   // Validate
   //
   if (typeof res !== "object" || res === null) {
-    log.error("decorateResponse util called but response is not an object");
+    log.warn("decorateResponse called but response is not an object");
     return; // eslint-disable-line no-useless-return
   }
 
