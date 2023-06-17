@@ -1,3 +1,4 @@
+const MockExpressResponse = require("mock-express-response");
 const decorateResponse = require("../decorateResponse.util");
 
 //
@@ -39,12 +40,17 @@ describe("Decorate response util", () => {
     decorateResponse(true);
     decorateResponse(null);
   });
+  it("Returns when no headers object is present", () => {
+    // No headers object is often passed in mocking and tests
+    const res = {};
+    decorateResponse(res);
+    // Expect res to still be an empty object
+    expect(res).toEqual({});
+  });
   describe("Decorating headers", () => {
-    it("Returns when no headers object is present", () => {
-      const res = {};
+    it("Adds the project invoke", () => {
+      const res = new MockExpressResponse();
       decorateResponse(res);
-      expect(res.headers).toBeUndefined();
     });
-    it.todo("Adds the project invoke");
   });
 });
