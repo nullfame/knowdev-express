@@ -14,6 +14,7 @@
     "test:coverage": "jest --coverage src/",
     "test:spec:decorateResponse.util": "jest ./src/util/__tests__/decorateResponse.util.spec.js",
     "test:spec:echo.route": "jest src/routes/__tests__/echo.route.spec.js",
+    "test:spec:getCurrentInvokeUuid.adapter": "jest ./src/util/adapters/__tests__/getCurrentInvokeUuid.adapter.spec.js",
     "test:spec:projectHandler.function": "jest src/functions/__tests__/projectHandler.function.spec.js",
     "postversion": "npm publish"
   },
