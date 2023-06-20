@@ -79,5 +79,9 @@ describe("Decorate response util", () => {
       decorateResponse(res);
       expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("Some other value");
     });
+    it.todo("Will return the project environment");
+    it.todo("Will return the project handler name");
+    it.todo("Will return the project key");
+    it.todo("Will return the project version");
   });
 });
