@@ -1,5 +1,6 @@
 const { UnhandledError } = require("@knowdev/errors");
 const log = require("@knowdev/log");
+const decorateResponse = require("../util/decorateResponse.util");
 const summarizeRequest = require("../util/summarizeRequest.util");
 const summarizeResponse = require("../util/summarizeResponse.util");
 
@@ -37,7 +38,10 @@ function projectHandler(handler) {
       let responseJson;
       // Add logging to res.json()
       res.json = (json) => {
+        log.trace("Preparing response");
         responseJson = json; // Populate our disgusting variable
+        decorateResponse(res);
+        log.trace("Sending response");
         originalJson.call(res, json); // Call the original res.json()
       };
 

@@ -1,4 +1,7 @@
+const HTTP = require("@knowdev/http");
 const log = require("@knowdev/log");
+
+const getCurrentInvokeUuid = require("./adapters/getCurrentInvokeUuid.adapter");
 
 //
 //
@@ -34,19 +37,22 @@ const decorateResponse = (res) => {
 
     //
     //
-    // Preprocess
+    // Decorate Headers
     //
 
-    //
-    //
-    // Process
-    //
-    res.set("X-Powered-By", "KnowDev");
+    // X-Powered-By, override "Express" but nothing else
+    if (
+      !res.get(HTTP.HEADER.POWERED_BY) ||
+      res.get(HTTP.HEADER.POWERED_BY) === "Express"
+    ) {
+      res.set(HTTP.HEADER.POWERED_BY, "knowdev.studio");
+    }
 
-    //
-    //
-    // Postprocess
-    //
+    // X-Project-Invocation
+    const currentInvoke = getCurrentInvokeUuid();
+    if (currentInvoke) {
+      res.setHeader(HTTP.HEADER.PROJECT.INVOCATION, currentInvoke);
+    }
 
     //
     //
