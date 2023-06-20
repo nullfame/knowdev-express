@@ -53,31 +53,35 @@ describe("Decorate response util", () => {
     expect(res).toEqual({});
   });
   describe("Decorating headers", () => {
-    it("Adds the project invoke", () => {
-      const res = new MockExpressResponse();
-      expect(res.get(HTTP.HEADER.PROJECT.INVOCATION)).toBeUndefined();
-      decorateResponse(res);
-      expect(res.get(HTTP.HEADER.PROJECT.INVOCATION)).not.toBeUndefined();
+    describe("Project invoke", () => {
+      it("Adds the project invoke", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.INVOCATION)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.PROJECT.INVOCATION)).not.toBeUndefined();
+      });
     });
-    it("Adds the powered by", () => {
-      const res = new MockExpressResponse();
-      expect(res.get(HTTP.HEADER.POWERED_BY)).toBeUndefined();
-      decorateResponse(res);
-      expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("knowdev.studio");
-    });
-    it("Adds the powered by and overrides the Express default", () => {
-      const res = new MockExpressResponse();
-      res.set(HTTP.HEADER.POWERED_BY, "Express");
-      expect(res.get(HTTP.HEADER.POWERED_BY)).not.toBeUndefined();
-      decorateResponse(res);
-      expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("knowdev.studio");
-    });
-    it("Will not add powered by if one exists", () => {
-      const res = new MockExpressResponse();
-      res.set(HTTP.HEADER.POWERED_BY, "Some other value");
-      expect(res.get(HTTP.HEADER.POWERED_BY)).not.toBeUndefined();
-      decorateResponse(res);
-      expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("Some other value");
+    describe("Powered by", () => {
+      it("Adds the powered by", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.POWERED_BY)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("knowdev.studio");
+      });
+      it("Adds the powered by and overrides the Express default", () => {
+        const res = new MockExpressResponse();
+        res.set(HTTP.HEADER.POWERED_BY, "Express");
+        expect(res.get(HTTP.HEADER.POWERED_BY)).not.toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("knowdev.studio");
+      });
+      it("Will not add powered by if one exists", () => {
+        const res = new MockExpressResponse();
+        res.set(HTTP.HEADER.POWERED_BY, "Some other value");
+        expect(res.get(HTTP.HEADER.POWERED_BY)).not.toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("Some other value");
+      });
     });
     it.todo("Will return the project environment");
     it.todo("Will return the project handler name");
