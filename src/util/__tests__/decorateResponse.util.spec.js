@@ -7,6 +7,10 @@ const decorateResponse = require("../decorateResponse.util");
 // Mock constants
 //
 
+const MOCK = {
+  ENV: "MOCK_ENV",
+};
+
 //
 //
 // Mock modules
@@ -83,7 +87,21 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.POWERED_BY)).toEqual("Some other value");
       });
     });
-    it.todo("Will return the project environment");
+    describe("Project environment", () => {
+      it("Adds the project environment if it is present", () => {
+        process.env.PROJECT_ENVIRONMENT = MOCK.ENV;
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).not.toBeUndefined();
+      });
+      it("Does not adds the project environment if it is not present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
+      });
+    });
     it.todo("Will return the project handler name");
     it.todo("Will return the project key");
     it.todo("Will return the project version");

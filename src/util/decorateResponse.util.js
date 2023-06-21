@@ -48,6 +48,14 @@ const decorateResponse = (res) => {
       res.set(HTTP.HEADER.POWERED_BY, "knowdev.studio");
     }
 
+    // X-Project-Environment
+    if (process.env.PROJECT_ENVIRONMENT) {
+      res.setHeader(
+        HTTP.HEADER.PROJECT.ENVIRONMENT,
+        process.env.PROJECT_ENVIRONMENT
+      );
+    }
+
     // X-Project-Invocation
     const currentInvoke = getCurrentInvokeUuid();
     if (currentInvoke) {
