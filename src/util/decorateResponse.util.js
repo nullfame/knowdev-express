@@ -18,7 +18,13 @@ const getCurrentInvokeUuid = require("./adapters/getCurrentInvokeUuid.adapter");
 // Main
 //
 
-const decorateResponse = (res) => {
+/**
+ *
+ * @param { import("express").Response } res
+ * @param { * } context
+ * @returns
+ */
+const decorateResponse = (res, { handler = "" } = {}) => {
   //
   //
   // Validate
@@ -56,6 +62,11 @@ const decorateResponse = (res) => {
       );
     }
 
+    // X-Project-Handler
+    if (handler) {
+      res.setHeader(HTTP.HEADER.PROJECT.HANDLER, handler);
+    }
+
     // X-Project-Invocation
     const currentInvoke = getCurrentInvokeUuid();
     if (currentInvoke) {
@@ -78,3 +89,12 @@ const decorateResponse = (res) => {
 //
 
 module.exports = decorateResponse;
+
+//
+//
+// Footnotes
+//
+
+// This is a "utility" function but it needs a lot of "context"
+// about the environment's secret parameters, the special adapter,
+// HTTP, etc.  There must be a better way to organize this

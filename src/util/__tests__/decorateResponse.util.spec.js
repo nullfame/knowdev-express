@@ -9,6 +9,7 @@ const decorateResponse = require("../decorateResponse.util");
 
 const MOCK = {
   ENV: "MOCK_ENV",
+  HANDLER: "MOCK_HANDLER",
 };
 
 //
@@ -102,7 +103,20 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
       });
     });
-    it.todo("Will return the project handler name");
+    describe("Project handler name", () => {
+      it("Adds the project handler if it is present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toBeUndefined();
+        decorateResponse(res, { handler: MOCK.HANDLER });
+        expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).not.toBeUndefined();
+      });
+      it("Does not adds the project handler if it is not present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toBeUndefined();
+        decorateResponse(res, {});
+        expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toBeUndefined();
+      });
+    });
     it.todo("Will return the project key");
     it.todo("Will return the project version");
   });
