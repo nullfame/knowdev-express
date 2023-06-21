@@ -24,7 +24,7 @@ const getCurrentInvokeUuid = require("./adapters/getCurrentInvokeUuid.adapter");
  * @param { * } context
  * @returns
  */
-const decorateResponse = (res, { handler = "" } = {}) => {
+const decorateResponse = (res, { handler = "", version = "" } = {}) => {
   //
   //
   // Validate
@@ -76,6 +76,11 @@ const decorateResponse = (res, { handler = "" } = {}) => {
     // X-Project-Key
     if (process.env.PROJECT_KEY) {
       res.setHeader(HTTP.HEADER.PROJECT.KEY, process.env.PROJECT_KEY);
+    }
+
+    // X-Project-Version
+    if (version) {
+      res.setHeader(HTTP.HEADER.PROJECT.VERSION, version);
     }
 
     //

@@ -11,6 +11,7 @@ const MOCK = {
   ENV: "MOCK_ENV",
   HANDLER: "MOCK_HANDLER",
   KEY: "MOCK_KEY",
+  VERSION: "MOCK_VERSION",
 };
 
 //
@@ -136,6 +137,20 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.KEY)).toBeUndefined();
       });
     });
-    it.todo("Will return the project version");
+    describe("Project version", () => {
+      it("Adds the project version if it is present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.VERSION)).toBeUndefined();
+        decorateResponse(res, { version: MOCK.VERSION });
+        expect(res.get(HTTP.HEADER.PROJECT.VERSION)).not.toBeUndefined();
+        expect(res.get(HTTP.HEADER.PROJECT.VERSION)).toEqual(MOCK.VERSION);
+      });
+      it("Does not adds the project version if it is not present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.VERSION)).toBeUndefined();
+        decorateResponse(res, {});
+        expect(res.get(HTTP.HEADER.PROJECT.VERSION)).toBeUndefined();
+      });
+    });
   });
 });
