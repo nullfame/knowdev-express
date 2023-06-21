@@ -10,6 +10,7 @@ const decorateResponse = require("../decorateResponse.util");
 const MOCK = {
   ENV: "MOCK_ENV",
   HANDLER: "MOCK_HANDLER",
+  KEY: "MOCK_KEY",
 };
 
 //
@@ -95,6 +96,7 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
         decorateResponse(res);
         expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).not.toBeUndefined();
+        expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toEqual(MOCK.ENV);
       });
       it("Does not adds the project environment if it is not present", () => {
         const res = new MockExpressResponse();
@@ -109,6 +111,7 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toBeUndefined();
         decorateResponse(res, { handler: MOCK.HANDLER });
         expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).not.toBeUndefined();
+        expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toEqual(MOCK.HANDLER);
       });
       it("Does not adds the project handler if it is not present", () => {
         const res = new MockExpressResponse();
@@ -117,7 +120,22 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.HANDLER)).toBeUndefined();
       });
     });
-    it.todo("Will return the project key");
+    describe("Project key", () => {
+      it("Adds the project key if it is present", () => {
+        process.env.PROJECT_KEY = MOCK.KEY;
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.KEY)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.PROJECT.KEY)).not.toBeUndefined();
+        expect(res.get(HTTP.HEADER.PROJECT.KEY)).toEqual(MOCK.KEY);
+      });
+      it("Does not adds the project key if it is not present", () => {
+        const res = new MockExpressResponse();
+        expect(res.get(HTTP.HEADER.PROJECT.KEY)).toBeUndefined();
+        decorateResponse(res);
+        expect(res.get(HTTP.HEADER.PROJECT.KEY)).toBeUndefined();
+      });
+    });
     it.todo("Will return the project version");
   });
 });

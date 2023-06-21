@@ -73,6 +73,11 @@ const decorateResponse = (res, { handler = "" } = {}) => {
       res.setHeader(HTTP.HEADER.PROJECT.INVOCATION, currentInvoke);
     }
 
+    // X-Project-Key
+    if (process.env.PROJECT_KEY) {
+      res.setHeader(HTTP.HEADER.PROJECT.KEY, process.env.PROJECT_KEY);
+    }
+
     //
     //
     // Error Handling
