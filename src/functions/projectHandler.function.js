@@ -9,7 +9,17 @@ const summarizeResponse = require("../util/summarizeResponse.util");
 // Function Definition
 //
 
-function projectHandler(handler) {
+/**
+ *
+ * @param {Function} handler
+ * @param {Object} options
+ * @param {string} options.name
+ * @returns {Function}
+ */
+function projectHandler(
+  handler,
+  { name = undefined, version = process.env.PROJECT_VERSION } = {}
+) {
   //
   //
   // Validate
@@ -40,7 +50,7 @@ function projectHandler(handler) {
       res.json = (json) => {
         log.trace("Preparing response");
         responseJson = json; // Populate our disgusting variable
-        decorateResponse(res);
+        decorateResponse(res, { name, version });
         log.trace("Sending response");
         originalJson.call(res, json); // Call the original res.json()
       };
