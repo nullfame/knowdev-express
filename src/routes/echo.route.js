@@ -15,7 +15,7 @@ const express = require("express");
 const { getCurrentInvoke } = require("@vendia/serverless-express");
 
 const projectHandler = require("../functions/projectHandler.function");
-const summarizeRequest = require("../functions/summarizeRequest.function");
+const summarizeRequest = require("../util/summarizeRequest.util");
 
 const router = express.Router();
 

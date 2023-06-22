@@ -73,47 +73,57 @@ describe("Project handler function", () => {
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
   });
-  it("Will catch an unhandled thrown error", () => {
-    const mockFunction = jest.fn(() => {
-      throw new Error("Sorpresa!");
+  describe("Error handling", () => {
+    it("Will catch an unhandled thrown error", () => {
+      const mockFunction = jest.fn(() => {
+        throw new Error("Sorpresa!");
+      });
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const mockResJson = jest.fn();
+      const res = {
+        json: mockResJson,
+        on: jest.fn(),
+        status: jest.fn(() => res),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockFunction).toHaveBeenCalledTimes(1);
+      expect(mockResJson).toHaveBeenCalledTimes(1);
+      const response = mockResJson.mock.calls[0][0];
+      expect(response).toMatchSchema(jsonApiErrorSchema);
+      expect(response.errors[0].status).toBe(500);
+      // The response title will be "Internal Application Error" but we don't want to test that here
+      // expect(response.errors[0].title).toBe("Internal Application Error");
     });
-    const handler = projectHandler(mockFunction);
-    const req = {};
-    const mockResJson = jest.fn();
-    const res = {
-      json: mockResJson,
-      on: jest.fn(),
-      status: jest.fn(() => res),
-    };
-    const next = () => {};
-    handler(req, res, next);
-    expect(mockFunction).toHaveBeenCalledTimes(1);
-    expect(mockResJson).toHaveBeenCalledTimes(1);
-    const response = mockResJson.mock.calls[0][0];
-    expect(response).toMatchSchema(jsonApiErrorSchema);
-    expect(response.errors[0].status).toBe(500);
-    // The response title will be "Internal Application Error" but we don't want to test that here
-    // expect(response.errors[0].title).toBe("Internal Application Error");
+    it("Will catch a thrown ProjectError and respond with the correct status code", () => {
+      // Mock a function that throws NotFoundError
+      const mockFunction = jest.fn(() => {
+        throw new NotFoundError();
+      });
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const mockResJson = jest.fn();
+      const res = {
+        json: mockResJson,
+        on: jest.fn(),
+        status: jest.fn(() => res),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockFunction).toHaveBeenCalledTimes(1);
+      expect(mockResJson).toHaveBeenCalledTimes(1);
+      const response = mockResJson.mock.calls[0][0];
+      expect(response).toMatchSchema(jsonApiErrorSchema);
+      expect(response.errors[0].status).toBe(404);
+    });
   });
-  it("Will catch a thrown ProjectError and respond with the correct status code", () => {
-    // Mock a function that throws NotFoundError
-    const mockFunction = jest.fn(() => {
-      throw new NotFoundError();
+  describe("Handler context", () => {
+    describe("Handler name", () => {
+      it.todo("Handler name will be passed in");
     });
-    const handler = projectHandler(mockFunction);
-    const req = {};
-    const mockResJson = jest.fn();
-    const res = {
-      json: mockResJson,
-      on: jest.fn(),
-      status: jest.fn(() => res),
-    };
-    const next = () => {};
-    handler(req, res, next);
-    expect(mockFunction).toHaveBeenCalledTimes(1);
-    expect(mockResJson).toHaveBeenCalledTimes(1);
-    const response = mockResJson.mock.calls[0][0];
-    expect(response).toMatchSchema(jsonApiErrorSchema);
-    expect(response.errors[0].status).toBe(404);
+    describe("Handler version", () => {
+      it.todo("Project version be passed in");
+    });
   });
 });

@@ -132,6 +132,16 @@ describe("Express Backend", () => {
         expect(res.body.req.method).toEqual("POST");
         expect(res.body.req.body).toEqual(TEST.BODY.STRING);
       });
+      it("POST / (empty)", async () => {
+        const res = await request(route).post("/");
+        // Validate the response
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchSchema(schema);
+        // Check the values
+        expect(res.body.req.url).toEqual("/");
+        expect(res.body.req.method).toEqual("POST");
+        expect(res.body.req.body).toEqual({}); // it converts empty body to an empty object
+      });
     });
     describe("Special case routes", () => {
       it("Responds with a 400", async () => {
