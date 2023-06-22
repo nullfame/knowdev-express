@@ -118,12 +118,4 @@ describe("Project handler function", () => {
       expect(response.errors[0].status).toBe(404);
     });
   });
-  describe("Handler context", () => {
-    describe("Handler name", () => {
-      it.todo("Handler name will be passed in");
-    });
-    describe("Handler version", () => {
-      it.todo("Project version be passed in");
-    });
-  });
 });
