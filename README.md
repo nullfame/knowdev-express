@@ -29,9 +29,13 @@ For [@knowdev/log](https://github.com/nullfame/knowdev-log):
 ``` bash
 LOG_LEVEL=all|trace|*debug*|info|warn|error|fatal|silent
 
+# Project metadata
 PROJECT_ENV=dev
 PROJECT_KEY=mayhem
 PROJECT_VERSION=0.1.0
+
+# Project secret will let tests bypass authentication
+PROJECT_SECRET=
 
 # Danger!
 PROJECT_UNAVAILABLE=false
