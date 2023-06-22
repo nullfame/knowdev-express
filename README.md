@@ -10,6 +10,7 @@ Encapsulates project opinions on JSON:API, logging, and debugging
 * The handler will bootstrap logging provided by `@knowdev/log`
 * The inbound request will be logged
 * The outbound response will be logged
+* The outbound response will be decorated with project headers
 * The handler will catch any `@knowdev/errors` and respond properly
 * The handler will catch any uncaught errors and respond with a `500` (from `@knowdev/errors`)
 
@@ -27,7 +28,16 @@ For [@knowdev/log](https://github.com/nullfame/knowdev-log):
 
 ``` bash
 LOG_LEVEL=all|trace|*debug*|info|warn|error|fatal|silent
+
+PROJECT_ENV=dev
+PROJECT_KEY=mayhem
+PROJECT_VERSION=0.1.0
+
+# Danger!
+PROJECT_UNAVAILABLE=false
 ```
+
+**⚠️ Danger! Setting `PROJECT_UNAVAILABLE=true` will cause the handler to always throw 503 Unavailable errors.**
 
 ### Example
 
@@ -60,6 +70,18 @@ const myRouteHandler = projectHandler((req, res) => {
 
 router.all("*", myRouteHandler);
 ```
+
+### Project Headers
+
+The following headers will be included based off the following values:
+
+| Header | Value |
+| ------ | ----- |
+| X-Powered-By | `knowdev.studio` | 
+| X-Project-Environment | `process.env.PROJECT_ENV` | 
+| X-Project-Invoke | AWS Lambda invoke UUID | 
+| X-Project-Key | `process.env.PROJECT_KEY` | 
+| X-Project-Version | `process.env.PROJECT_VERSION` | 
 
 ### Logging
 
@@ -141,12 +163,9 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v0.3.0: Headers, `PROJECT_UNAVAILABLE`
 * v0.2.0: Logging, special echo routes, summarize response
 * v0.1.0: fork from separate project (echoRoute, log, projectHandler, summarizeRequest)
-
-## 🛣 Roadmap
-
-### Wishlist 🌠
 
 ## 📜 License
 
