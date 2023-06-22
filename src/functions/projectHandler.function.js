@@ -1,5 +1,7 @@
-const { UnhandledError } = require("@knowdev/errors");
+const { UnavailableError, UnhandledError } = require("@knowdev/errors");
+const { envBoolean } = require("@knowdev/functions");
 const log = require("@knowdev/log");
+
 const decorateResponse = require("../util/decorateResponse.util");
 const summarizeRequest = require("../util/summarizeRequest.util");
 const summarizeResponse = require("../util/summarizeResponse.util");
@@ -18,7 +20,11 @@ const summarizeResponse = require("../util/summarizeResponse.util");
  */
 function projectHandler(
   handler,
-  { name = undefined, version = process.env.PROJECT_VERSION } = {}
+  {
+    name = undefined,
+    unavailable = envBoolean("PROJECT_UNAVAILABLE", { defaultValue: false }),
+    version = process.env.PROJECT_VERSION,
+  } = {}
 ) {
   //
   //
@@ -65,6 +71,15 @@ function projectHandler(
       //
       // Process
       //
+
+      // Check available
+      if (unavailable) {
+        log.warn(
+          "Project unavailable: either PROJECT_UNAVAILABLE=true or { unavailable: true } was passed to projectHandler"
+        );
+        log.debug("Intentionally throwing unavailable");
+        throw UnavailableError();
+      }
 
       // Invoke handler
       log.trace("Handler call");

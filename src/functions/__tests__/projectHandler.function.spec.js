@@ -1,4 +1,6 @@
 const { NotFoundError } = require("@knowdev/errors");
+const HTTP = require("@knowdev/http");
+
 const { matchers } = require("jest-json-schema");
 
 const projectHandler = require("../projectHandler.function");
@@ -119,11 +121,57 @@ describe("Project handler function", () => {
     });
   });
   describe("Unavailable mode", () => {
-    it.todo(
-      "Will respond with a 503 if process.env.PROJECT_UNAVAILABLE is set to true"
-    );
-    it.todo(
-      "Will respond with a 503 if unavailable=true is passed to the handler"
-    );
+    it("Works as normal when process.env.PROJECT_UNAVAILABLE is set to false", () => {
+      process.env.PROJECT_UNAVAILABLE = "false";
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const mockResJson = jest.fn();
+      const res = {
+        json: mockResJson,
+        on: jest.fn(),
+        status: jest.fn(() => res),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+    it("Will respond with a 503 if process.env.PROJECT_UNAVAILABLE is set to true", () => {
+      process.env.PROJECT_UNAVAILABLE = "true";
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const mockResJson = jest.fn();
+      const res = {
+        json: mockResJson,
+        on: jest.fn(),
+        status: jest.fn(() => res),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockFunction).toHaveBeenCalledTimes(0);
+      expect(mockResJson).toHaveBeenCalledTimes(1);
+      const response = mockResJson.mock.calls[0][0];
+      expect(response).toMatchSchema(jsonApiErrorSchema);
+      expect(response.errors[0].status).toBe(HTTP.CODE.UNAVAILABLE);
+    });
+    it("Will respond with a 503 if unavailable=true is passed to the handler", () => {
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction, { unavailable: true });
+      const req = {};
+      const mockResJson = jest.fn();
+      const res = {
+        json: mockResJson,
+        on: jest.fn(),
+        status: jest.fn(() => res),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockFunction).toHaveBeenCalledTimes(0);
+      expect(mockResJson).toHaveBeenCalledTimes(1);
+      const response = mockResJson.mock.calls[0][0];
+      expect(response).toMatchSchema(jsonApiErrorSchema);
+      expect(response.errors[0].status).toBe(HTTP.CODE.UNAVAILABLE);
+    });
   });
 });
