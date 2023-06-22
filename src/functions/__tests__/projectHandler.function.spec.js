@@ -118,4 +118,12 @@ describe("Project handler function", () => {
       expect(response.errors[0].status).toBe(404);
     });
   });
+  describe("Unavailable mode", () => {
+    it.todo(
+      "Will respond with a 503 if process.env.PROJECT_UNAVAILABLE is set to true"
+    );
+    it.todo(
+      "Will respond with a 503 if unavailable=true is passed to the handler"
+    );
+  });
 });
