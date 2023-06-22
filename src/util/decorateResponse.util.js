@@ -55,11 +55,8 @@ const decorateResponse = (res, { handler = "", version = "" } = {}) => {
     }
 
     // X-Project-Environment
-    if (process.env.PROJECT_ENVIRONMENT) {
-      res.setHeader(
-        HTTP.HEADER.PROJECT.ENVIRONMENT,
-        process.env.PROJECT_ENVIRONMENT
-      );
+    if (process.env.PROJECT_ENV) {
+      res.setHeader(HTTP.HEADER.PROJECT.ENVIRONMENT, process.env.PROJECT_ENV);
     }
 
     // X-Project-Handler

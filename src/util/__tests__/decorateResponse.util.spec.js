@@ -92,7 +92,7 @@ describe("Decorate response util", () => {
     });
     describe("Project environment", () => {
       it("Adds the project environment if it is present", () => {
-        process.env.PROJECT_ENVIRONMENT = MOCK.ENV;
+        process.env.PROJECT_ENV = MOCK.ENV;
         const res = new MockExpressResponse();
         expect(res.get(HTTP.HEADER.PROJECT.ENVIRONMENT)).toBeUndefined();
         decorateResponse(res);
