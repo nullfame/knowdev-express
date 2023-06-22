@@ -129,22 +129,6 @@ router.all(
 
     //
     //
-    // Decorate Response
-    //
-
-    // Invoke
-    const currentInvoke = getCurrentInvoke();
-    if (
-      currentInvoke &&
-      currentInvoke.context &&
-      currentInvoke.context.awsRequestId
-    ) {
-      response.invoke = currentInvoke.context.awsRequestId;
-      res.setHeader("X-Project-Invoke", response.invoke);
-    }
-
-    //
-    //
     // Respond as JSON
     //
 
