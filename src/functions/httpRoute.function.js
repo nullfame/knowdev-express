@@ -8,8 +8,14 @@ const projectHandler = require("./projectHandler.function");
 // Main
 //
 
-const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) =>
-  projectHandler((req, res) => {
+const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) => {
+  // Give a default name if there isn't one
+  if (!context.name) {
+    context.name = "_httpRoute";
+  }
+
+  // Return a function that will be used as an express route
+  return projectHandler((req, res) => {
     // Set up response
     const response = { res: { statusCode } };
 
@@ -44,6 +50,7 @@ const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) =>
     // Send the response
     return res.status(statusCode).json(response);
   }, context);
+};
 
 //
 //
