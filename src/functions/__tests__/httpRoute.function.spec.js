@@ -52,18 +52,45 @@ describe("HttpRoute function", () => {
     // Check the response
     expect(res.headers["x-powered-by"]).toEqual("knowdev.studio");
   });
-  it.todo("Returns 200 by default");
+  it("Returns 200 by default", async () => {
+    // Setup express to use our route
+    const app = express();
+    const route = httpRoute();
+    app.use(route);
+    // Make a request
+    const res = await request(app).get("/");
+    // Check the response
+    expect(res.statusCode).toEqual(HTTP.CODE.OK);
+  });
   it.todo("Passes through context");
-  it.todo("Returns 200 on request");
-  it.todo("Returns 204");
-  it.todo("Returns 400");
-  it.todo("Returns 403");
-  it.todo("Returns 404");
-  it.todo("Returns 410");
-  it.todo("Returns 500");
-  it.todo("Returns 502");
-  it.todo("Returns 503");
-  it.todo("Returns 504");
+  describe("Fully supports many default statuses", () => {
+    const statuses = [
+      HTTP.CODE.OK,
+      HTTP.CODE.NO_CONTENT,
+      HTTP.CODE.BAD_REQUEST,
+      HTTP.CODE.UNAUTHORIZED,
+      HTTP.CODE.FORBIDDEN,
+      HTTP.CODE.NOT_FOUND,
+      HTTP.CODE.GONE,
+      HTTP.CODE.TEAPOT,
+      HTTP.CODE.INTERNAL_ERROR,
+      HTTP.CODE.BAD_GATEWAY,
+      HTTP.CODE.UNAVAILABLE,
+      HTTP.CODE.GATEWAY_TIMEOUT,
+    ];
+    statuses.forEach((status) => {
+      it(`Returns ${status} on request`, async () => {
+        // Setup express to use our route
+        const app = express();
+        const route = httpRoute(status);
+        app.use(route);
+        // Make a request
+        const res = await request(app).get("/");
+        // Check the response
+        expect(res.statusCode).toEqual(status);
+      });
+    });
+  });
   it.todo("Returns whatever you tell it");
   it.todo("Warns when it cannot map a message");
 });
