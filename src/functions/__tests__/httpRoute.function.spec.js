@@ -29,7 +29,7 @@ afterEach(() => {
 // Run tests
 //
 
-describe("HttpRoute function", () => {
+describe("HTTP route function", () => {
   it("Is a function", () => {
     expect(httpRoute).toBeFunction();
   });
