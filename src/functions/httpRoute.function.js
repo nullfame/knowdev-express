@@ -73,7 +73,7 @@ const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) => {
     // Warn if the message is not found
     if (!response.res.statusMessage) {
       log.warn(
-        `@knowdev/express: Status code ${statusCode} not found in statusMessage map`
+        `@knowdev/express: status code ${statusCode} not found in statusMessage map`
       );
       log.trace.var(statusMessage);
     }
