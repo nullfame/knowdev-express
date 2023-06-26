@@ -67,7 +67,6 @@ describe("HTTP route function", () => {
     // Check the response
     expect(res.statusCode).toEqual(HTTP.CODE.OK);
   });
-  it.todo("Passes through context");
   describe("Fully supports many default statuses", () => {
     const statuses = [
       HTTP.CODE.OK,
