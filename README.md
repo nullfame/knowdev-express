@@ -75,6 +75,33 @@ const myRouteHandler = projectHandler((req, res) => {
 router.all("*", myRouteHandler);
 ```
 
+#### Handler Context
+
+Use the context object to pass options
+
+```
+const { projectHandler } = require("@knowdev/express");
+
+const myFunction - (req, res) => {
+  // ...
+}
+
+const context = {
+  name: "myFunction",
+  // ...
+}
+
+const myRouteHandler = projectHandler(myFunction, context);
+
+router.all("*", myRouteHandler);
+```
+
+| Option | Default | Description
+| ------ | ------- | -----------
+| `name` | `undefined` | Name used in logging
+| `unavailable` | `false \|\| process.env.PROJECT_UNAVAILABLE` | Throw `503` instead of responding. For unusual maintenance situations only (you're welcome)
+| `version` | `process.env.PROJECT_VERSION` | Version used in logging
+
 ### Project Headers
 
 The following headers will be included based off the following values:
