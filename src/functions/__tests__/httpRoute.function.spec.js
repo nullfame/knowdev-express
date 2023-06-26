@@ -1,4 +1,5 @@
 const HTTP = require("@knowdev/http");
+const log = require("@knowdev/log");
 
 const express = require("express");
 const { matchers } = require("jest-json-schema");
@@ -118,7 +119,49 @@ describe("HttpRoute function", () => {
     expect(res.statusCode).toEqual(201);
   });
   describe("Logging and observability", () => {
-    it.todo("Warns when it cannot map a message");
-    it.todo("Warns when it is an error that cannot be thrown");
+    beforeEach(() => {
+      // Spy on log.warn
+      jest.spyOn(log, "warn");
+    });
+    afterEach(() => {
+      // Release the spy
+      log.warn.mockRestore();
+    });
+    it("Warns when it cannot map a message", async () => {
+      // Setup express to use our route
+      const app = express();
+      const route = httpRoute(299);
+      app.use(route);
+      // Make a request
+      const res = await request(app).get("/");
+      // Check the response
+      expect(res.statusCode).toEqual(299);
+      // Check the log
+      expect(log.warn).toHaveBeenCalledTimes(1);
+      // The _exact_ message doesn't matter, but we should start with @knowdev/express for now
+      expect(log.warn).toHaveBeenCalledWith(
+        "@knowdev/express: status code 299 not found in statusMessage map"
+      );
+    });
+    it("Warns when it is an error that cannot be thrown", async () => {
+      // Setup express to use our route
+      const app = express();
+      const route = httpRoute(499);
+      app.use(route);
+      // Make a request
+      const res = await request(app).get("/");
+      // Check the response
+      expect(res.statusCode).toEqual(499);
+      expect(log.warn).toHaveBeenCalledTimes(2);
+      // The _exact_ message doesn't matter, but we should start with @knowdev/express for now
+      expect(log.warn).toHaveBeenNthCalledWith(
+        1,
+        "@knowdev/express: status code 499 not mapped as throwable"
+      );
+      expect(log.warn).toHaveBeenNthCalledWith(
+        2,
+        "@knowdev/express: status code 499 not found in statusMessage map"
+      );
+    });
   });
 });
