@@ -107,7 +107,6 @@ describe("HttpRoute function", () => {
       }
     });
   });
-  it.todo("Warns when it cannot map a message");
   it("Returns whatever you tell it", async () => {
     // Setup express to use our route
     const app = express();
@@ -117,5 +116,9 @@ describe("HttpRoute function", () => {
     const res = await request(app).get("/");
     // Check the response
     expect(res.statusCode).toEqual(201);
+  });
+  describe("Logging and observability", () => {
+    it.todo("Warns when it cannot map a message");
+    it.todo("Warns when it is an error that cannot be thrown");
   });
 });
