@@ -107,6 +107,15 @@ describe("HttpRoute function", () => {
       }
     });
   });
-  it.todo("Returns whatever you tell it");
   it.todo("Warns when it cannot map a message");
+  it("Returns whatever you tell it", async () => {
+    // Setup express to use our route
+    const app = express();
+    const route = httpRoute(201);
+    app.use(route);
+    // Make a request
+    const res = await request(app).get("/");
+    // Check the response
+    expect(res.statusCode).toEqual(201);
+  });
 });
