@@ -1,6 +1,7 @@
 const log = require("@knowdev/log");
 
 const echoRoute = require("./routes/echo.route");
+const httpRoute = require("./functions/httpRoute.function");
 const projectHandler = require("./functions/projectHandler.function");
 const summarizeRequest = require("./util/summarizeRequest.util");
 const summarizeResponse = require("./util/summarizeResponse.util");
@@ -12,6 +13,7 @@ const summarizeResponse = require("./util/summarizeResponse.util");
 
 module.exports = {
   echoRoute,
+  httpRoute,
   log,
   projectHandler,
   summarizeRequest,

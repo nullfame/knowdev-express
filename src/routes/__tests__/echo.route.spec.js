@@ -6,6 +6,7 @@ const { matchers } = require("jest-json-schema");
 const request = require("supertest");
 
 const router = require("../echo.route");
+const jsonApiErrorSchema = require("../../etc/jsonApiError.schema");
 
 //
 //
@@ -31,25 +32,6 @@ const schema = {
       required: ["baseUrl"],
     },
   },
-};
-
-const jsonApiErrorSchema = {
-  type: "object",
-  properties: {
-    errors: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          status: { type: "number" },
-          title: { type: "string" },
-          detail: { type: "string" },
-        },
-        required: ["status", "title"],
-      },
-    },
-  },
-  required: ["errors"],
 };
 
 //

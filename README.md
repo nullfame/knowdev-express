@@ -143,6 +143,25 @@ Responds by echoing back details of your original submission, helpful for debugg
 
 Note these error routes are in addition to the path you may be using to specify the echo route. If you follow the above example of using `/echo/*`, your full route would be `/echo/error/503`
 
+#### httpRoute
+
+``` javascript
+const { httpRoute } = require("@knowdev/express");
+const HTTP = require("@knowdev/http");
+
+const app = express();
+app.use("/bogus", httpRoute(HTTP.CODE.NOT_FOUND));
+app.use("/bogus/*", httpRoute(HTTP.CODE.NOT_FOUND));
+```
+
+Returns an empty body for 200, no content for 204, and a proper error message if possible for 4XX and 5XX.
+
+Accepts any `context` that can be passed to the `projectHandler`
+
+``` javascript
+app.use("/*", httpRoute(HTTP.CODE.BAD_REQUEST, { name: "badRequestCatchAll" }));
+```
+
 ### Functions
 
 #### summarizeRequest
@@ -167,6 +186,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v0.4.0: httpRoute
 * v0.3.0: Headers, `PROJECT_UNAVAILABLE`
 * v0.2.0: Logging, special echo routes, summarize response
 * v0.1.0: fork from separate project (echoRoute, log, projectHandler, summarizeRequest)
