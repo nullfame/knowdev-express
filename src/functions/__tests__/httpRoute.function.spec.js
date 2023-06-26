@@ -1,14 +1,18 @@
 const HTTP = require("@knowdev/http");
 
 const express = require("express");
+const { matchers } = require("jest-json-schema");
 const request = require("supertest");
 
 const httpRoute = require("../httpRoute.function");
+const jsonApiErrorSchema = require("../../etc/jsonApiError.schema");
 
 //
 //
 // Mock environment
 //
+
+expect.extend(matchers);
 
 const DEFAULT_ENV = process.env;
 beforeEach(() => {
@@ -89,6 +93,18 @@ describe("HttpRoute function", () => {
         // Check the response
         expect(res.statusCode).toEqual(status);
       });
+      if (status >= 400) {
+        it(`Returns a JSON:API-complaint ${status} error`, async () => {
+          // Setup express to use our route
+          const app = express();
+          const route = httpRoute(status);
+          app.use(route);
+          // Make a request
+          const res = await request(app).get("/");
+          // Check the response schema
+          expect(res.body).toMatchSchema(jsonApiErrorSchema);
+        });
+      }
     });
   });
   it.todo("Returns whatever you tell it");

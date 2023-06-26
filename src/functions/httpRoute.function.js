@@ -1,5 +1,17 @@
 const HTTP = require("@knowdev/http");
 const log = require("@knowdev/log");
+const {
+  BadGatewayError,
+  BadRequestError,
+  ForbiddenError,
+  GatewayTimeoutError,
+  GoneError,
+  InternalError,
+  NotFoundError,
+  TeapotError,
+  UnauthorizedError,
+  UnavailableError,
+} = require("@knowdev/errors");
 
 const projectHandler = require("./projectHandler.function");
 
@@ -19,20 +31,40 @@ const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) => {
     // Set up response
     const response = { res: { statusCode } };
 
+    // Map the most throwable status codes to errors and throw them!
+    const error = {
+      [HTTP.CODE.BAD_REQUEST]: BadRequestError,
+      [HTTP.CODE.UNAUTHORIZED]: UnauthorizedError,
+      [HTTP.CODE.FORBIDDEN]: ForbiddenError,
+      [HTTP.CODE.NOT_FOUND]: NotFoundError,
+      [HTTP.CODE.GONE]: GoneError,
+      [HTTP.CODE.TEAPOT]: TeapotError,
+      [HTTP.CODE.INTERNAL_ERROR]: InternalError,
+      [HTTP.CODE.BAD_GATEWAY]: BadGatewayError,
+      [HTTP.CODE.UNAVAILABLE]: UnavailableError,
+      [HTTP.CODE.GATEWAY_TIMEOUT]: GatewayTimeoutError,
+    };
+
+    // If this maps to an error, throw it
+    if (error[statusCode]) {
+      log.trace(
+        `@knowdev/express: gracefully throwing ${statusCode} up to projectHandler`
+      );
+      throw new error[statusCode]();
+    }
+
+    // If this is an error and we didn't get thrown, log a warning
+    if (statusCode >= 400) {
+      log.warn(
+        `@knowdev/express: status code ${statusCode} not mapped as throwable`
+      );
+    }
+
     // Made status codes to messages; if the status code is not found it will be omitted
     const statusMessage = {
       [HTTP.CODE.OK]: "OK",
       [HTTP.CODE.NO_CONTENT]: "No Content",
-      [HTTP.CODE.BAD_REQUEST]: "Bad Request",
-      [HTTP.CODE.UNAUTHORIZED]: "Unauthorized",
-      [HTTP.CODE.FORBIDDEN]: "Forbidden",
-      [HTTP.CODE.NOT_FOUND]: "Not Found",
-      [HTTP.CODE.GONE]: "Gone",
-      [HTTP.CODE.TEAPOT]: "I'm a teapot",
-      [HTTP.CODE.INTERNAL_ERROR]: "Internal Error",
-      [HTTP.CODE.BAD_GATEWAY]: "Bad Gateway",
-      [HTTP.CODE.UNAVAILABLE]: "Unavailable",
-      [HTTP.CODE.GATEWAY_TIMEOUT]: "Gateway Timeout",
+      // Not including error codes because they are handled above
     };
 
     // Match the status message to the status code; if the status code is not found it will be omitted because the map will return undefined
@@ -44,7 +76,6 @@ const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) => {
         `@knowdev/express: Status code ${statusCode} not found in statusMessage map`
       );
       log.trace.var(statusMessage);
-      log.debug("Continuing...");
     }
 
     // Send the response
