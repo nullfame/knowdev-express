@@ -82,12 +82,14 @@ describe("Project handler function", () => {
       const mockFunctionOne = jest.fn((req, res, next) => {
         console.log("mockFunctionOne reporting; calling next()");
         next();
+        console.log("next() returned; mockFunctionOne exiting");
       });
       const mockFunctionTwo = jest.fn((req, res) => {
         console.log("mockFunctionTwo reporting; sending response");
         res.json({
           goose: "honk",
         });
+        console.log("response sent; mockFunctionTwo exiting");
       });
       const handlerOne = projectHandler(mockFunctionOne, {
         name: "handlerOne",

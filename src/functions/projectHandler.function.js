@@ -71,13 +71,13 @@ function projectHandler(
       let responseJson;
       // Add logging to res.json()
       res.json = (json) => {
-        log.trace("Preparing response");
-        responseJson = json; // Populate our disgusting variable
         if (!res.locals._projectHandler.decoratedResponse) {
+          log.trace("Preparing response");
+          responseJson = json; // Populate our disgusting variable
           res.locals._projectHandler.decoratedResponse = true;
           decorateResponse(res, { name, version });
+          log.trace("Sending response");
         }
-        log.trace("Sending response");
         originalJson.call(res, json); // Call the original res.json()
       };
 
@@ -105,9 +105,9 @@ function projectHandler(
       }
 
       // Invoke handler
-      log.trace("Handler call");
+      log.trace(`Handler call {name:${name}}`);
       handler(req, res, ...params);
-      log.trace("Handler exit");
+      log.trace(`Handler exit {name:${name}}`);
 
       //
       //
