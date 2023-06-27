@@ -72,9 +72,8 @@ function projectHandler(
       //
 
       // Save the original res.json()
-      const originalJson = res.json;
-      if (!res.locals._projectHandler.swapJson) {
-        res.locals._projectHandler.swapJson = true;
+      if (!res.locals._projectHandler.originalJson) {
+        res.locals._projectHandler.originalJson = res.json;
         // Add logging to res.json()
         res.json = (json) => {
           if (!res.locals._projectHandler.decoratedResponse) {
@@ -84,7 +83,7 @@ function projectHandler(
             decorateResponse(res, { name, version });
           }
           log.trace("Sending response");
-          originalJson.call(res, json); // Call the original res.json()
+          res.locals._projectHandler.originalJson.call(res, json); // Call the original res.json()
         };
       }
 
