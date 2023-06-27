@@ -42,6 +42,11 @@ function projectHandler(
     // Set req.locals if it doesn't exist
     if (!req.locals) req.locals = {};
     if (!req.locals._projectHandler) req.locals._projectHandler = {};
+
+    // Set res.locals if it doesn't exist
+    if (!res.locals) res.locals = {};
+    if (!res.locals._projectHandler) res.locals._projectHandler = {};
+
     // Set up a local variable to track what we've logged
     if (!req.locals._projectHandler.loggedTraceMode) {
       req.locals._projectHandler.loggedTraceMode = true;
@@ -68,7 +73,10 @@ function projectHandler(
       res.json = (json) => {
         log.trace("Preparing response");
         responseJson = json; // Populate our disgusting variable
-        decorateResponse(res, { name, version });
+        if (!res.locals._projectHandler.decoratedResponse) {
+          res.locals._projectHandler.decoratedResponse = true;
+          decorateResponse(res, { name, version });
+        }
         log.trace("Sending response");
         originalJson.call(res, json); // Call the original res.json()
       };

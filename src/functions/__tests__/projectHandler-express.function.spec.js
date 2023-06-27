@@ -3,6 +3,7 @@ const log = require("@knowdev/log");
 const express = require("express");
 const request = require("supertest");
 
+const decorateResponse = require("../../util/decorateResponse.util");
 const projectHandler = require("../projectHandler.function");
 
 //
@@ -14,6 +15,9 @@ const projectHandler = require("../projectHandler.function");
 //
 // Mock modules
 //
+
+// Mock decorate response
+jest.mock("../../util/decorateResponse.util");
 
 //
 //
@@ -27,6 +31,7 @@ beforeEach(() => {
 afterEach(() => {
   process.env = DEFAULT_ENV;
   jest.resetModules();
+  jest.clearAllMocks();
 });
 
 //
@@ -66,6 +71,8 @@ describe("Project handler function", () => {
       // Release the spy
       delete log.info.var; // Not necessary, but clear
       log.info.mockRestore();
+      // Expect decorateResponse to have been called once
+      expect(decorateResponse).toBeCalledTimes(1);
     });
     it("Can be called twice", async () => {
       // Spy on log.info
@@ -105,6 +112,8 @@ describe("Project handler function", () => {
       // Release the spy
       delete log.info.var; // Not necessary, but clear
       log.info.mockRestore();
+      // Expect decorateResponse to have been called once
+      expect(decorateResponse).toBeCalledTimes(1);
     });
   });
 });
