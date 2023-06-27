@@ -18,6 +18,7 @@
     "test:spec:httpRoute-projectHandler.function": "jest src/functions/__tests__/httpRoute-projectHandler.function.spec.js",
     "test:spec:httpRoute.function": "jest ./src/functions/__tests__/httpRoute.function.spec.js",
     "test:spec:projectHandler-decorateResponse.function": "jest src/functions/__tests__/projectHandler-decorateResponse.function.spec.js",
+    "test:spec:projectHandler-express.function": "jest src/functions/__tests__/projectHandler-express.function.spec.js",
     "test:spec:projectHandler.function": "jest src/functions/__tests__/projectHandler.function.spec.js",
     "postversion": "npm publish"
   },
