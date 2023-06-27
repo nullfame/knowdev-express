@@ -75,17 +75,21 @@ function projectHandler(
       const originalJson = res.json;
       // Declare a hideous local variable
       let responseJson;
-      // Add logging to res.json()
-      res.json = (json) => {
-        if (!res.locals._projectHandler.decoratedResponse) {
-          log.trace("Preparing response");
-          responseJson = json; // Populate our disgusting variable
-          res.locals._projectHandler.decoratedResponse = true;
-          decorateResponse(res, { name, version });
+      if (!res.locals._projectHandler.swapJson) {
+        res.locals._projectHandler.swapJson = true;
+        // Add logging to res.json()
+        res.json = (json) => {
+          if (!res.locals._projectHandler.decoratedResponse) {
+            log.trace("Preparing response");
+            // TODO: this should throw and error if it is commented out:
+            responseJson = json; // Populate our disgusting variable
+            res.locals._projectHandler.decoratedResponse = true;
+            decorateResponse(res, { name, version });
+          }
           log.trace("Sending response");
-        }
-        originalJson.call(res, json); // Call the original res.json()
-      };
+          originalJson.call(res, json); // Call the original res.json()
+        };
+      }
 
       // Listen for response finish
       res.on("finish", () => {
