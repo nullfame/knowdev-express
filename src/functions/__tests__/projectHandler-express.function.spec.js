@@ -26,6 +26,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   process.env = DEFAULT_ENV;
+  jest.resetModules();
 });
 
 //
@@ -67,6 +68,9 @@ describe("Project handler function", () => {
       log.info.mockRestore();
     });
     it("Can be called twice", async () => {
+      // Spy on log.info
+      jest.spyOn(log, "info");
+      log.info.var = jest.fn();
       // Set up our mock function
       const mockFunctionOne = jest.fn((req, res, next) => {
         console.log("mockFunctionOne reporting; calling next()");
@@ -90,6 +94,17 @@ describe("Project handler function", () => {
       // Make a request
       const res = await request(app).get("/");
       expect(res.body).toEqual({ goose: "honk" });
+      // Check the log was called twice: once for the request, once for the response
+      expect(log.info.var).toBeCalledTimes(2);
+      // Both calls should be an object with a single key: "req" or "res"
+      expect(log.info.var.mock.calls[0][0]).toHaveProperty("req");
+      expect(log.info.var.mock.calls[1][0]).toHaveProperty("res");
+      // The count of keys in each call should be 1
+      expect(Object.keys(log.info.var.mock.calls[0][0]).length).toEqual(1);
+      expect(Object.keys(log.info.var.mock.calls[1][0]).length).toEqual(1);
+      // Release the spy
+      delete log.info.var; // Not necessary, but clear
+      log.info.mockRestore();
     });
   });
 });

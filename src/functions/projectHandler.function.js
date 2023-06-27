@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 const log = require("@knowdev/log");
@@ -38,10 +39,21 @@ function projectHandler(
   //
 
   return (req, res, ...params) => {
-    log.trace("Project logging in trace mode");
+    // Set req.locals if it doesn't exist
+    if (!req.locals) req.locals = {};
+    if (!req.locals._projectHandler) req.locals._projectHandler = {};
+    // Set up a local variable to track what we've logged
+    if (!req.locals._projectHandler.loggedTraceMode) {
+      req.locals._projectHandler.loggedTraceMode = true;
+      log.trace("Project logging in trace mode");
+    }
+
     try {
       // Log request
-      log.info.var({ req: summarizeRequest(req) });
+      if (!req.locals._projectHandler.loggedRequestInfo) {
+        req.locals._projectHandler.loggedRequestInfo = true;
+        log.info.var({ req: summarizeRequest(req) });
+      }
 
       //
       //
@@ -63,8 +75,11 @@ function projectHandler(
 
       // Listen for response finish
       res.on("finish", () => {
-        log.trace("Response finish event");
-        log.info.var({ res: summarizeResponse(res, { body: responseJson }) });
+        if (!req.locals._projectHandler.loggedResponseInfo) {
+          req.locals._projectHandler.loggedResponseInfo = true;
+          log.trace("Response finish event");
+          log.info.var({ res: summarizeResponse(res, { body: responseJson }) });
+        }
       });
 
       //
