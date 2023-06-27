@@ -68,11 +68,11 @@ describe("Project handler function", () => {
       // The count of keys in each call should be 1
       expect(Object.keys(log.info.var.mock.calls[0][0]).length).toEqual(1);
       expect(Object.keys(log.info.var.mock.calls[1][0]).length).toEqual(1);
+      // Expect decorateResponse to have been called once
+      expect(decorateResponse).toBeCalledTimes(1);
       // Release the spy
       delete log.info.var; // Not necessary, but clear
       log.info.mockRestore();
-      // Expect decorateResponse to have been called once
-      expect(decorateResponse).toBeCalledTimes(1);
     });
     it("Can be called twice", async () => {
       // Spy on log.info
@@ -111,11 +111,11 @@ describe("Project handler function", () => {
       // The count of keys in each call should be 1
       expect(Object.keys(log.info.var.mock.calls[0][0]).length).toEqual(1);
       expect(Object.keys(log.info.var.mock.calls[1][0]).length).toEqual(1);
+      // Expect decorateResponse to have been called once
+      expect(decorateResponse).toBeCalledTimes(1);
       // Release the spy
       delete log.info.var; // Not necessary, but clear
       log.info.mockRestore();
-      // Expect decorateResponse to have been called once
-      expect(decorateResponse).toBeCalledTimes(1);
     });
   });
 });
