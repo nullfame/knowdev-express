@@ -31,7 +31,13 @@ function projectHandler(
   //
   // Validate
   //
-  // * Nothing. Maybe in the future a validation function will be passed in
+
+  if (!name) {
+    // If handler has a name, use it
+    if (handler.name) {
+      name = handler.name; // eslint-disable-line no-param-reassign
+    }
+  }
 
   //
   //
