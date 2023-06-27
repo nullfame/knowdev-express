@@ -75,6 +75,23 @@ describe("Project handler function", () => {
     handler(req, res, next);
     expect(mockFunction).toHaveBeenCalledTimes(1);
   });
+  it("Passes req, res, and anything else to the handler", () => {
+    // Set up four mock variables
+    const req = {};
+    const res = {
+      on: jest.fn(),
+    };
+    const three = "THREE";
+    const four = "FOUR";
+    // Set up our mock function
+    const mockFunction = jest.fn();
+    const handler = projectHandler(mockFunction);
+    // Call the handler with our mock variables
+    handler(req, res, three, four);
+    // Expect the mock function to have been called with our mock variables
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+    expect(mockFunction).toHaveBeenCalledWith(req, res, three, four);
+  });
   describe("Error handling", () => {
     it("Will catch an unhandled thrown error", () => {
       const mockFunction = jest.fn(() => {

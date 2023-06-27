@@ -37,7 +37,7 @@ function projectHandler(
   // Setup
   //
 
-  return (req, res, next, ...params) => {
+  return (req, res, ...params) => {
     log.trace("Project logging in trace mode");
     try {
       // Log request
