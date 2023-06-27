@@ -65,6 +65,7 @@ describe("Project handler function", () => {
       // Both calls should be an object with a single key: "req" or "res"
       expect(log.info.var.mock.calls[0][0]).toHaveProperty("req");
       expect(log.info.var.mock.calls[1][0]).toHaveProperty("res");
+      expect(log.info.var.mock.calls[1][0].res.body).toEqual({ goose: "honk" });
       // The count of keys in each call should be 1
       expect(Object.keys(log.info.var.mock.calls[0][0]).length).toEqual(1);
       expect(Object.keys(log.info.var.mock.calls[1][0]).length).toEqual(1);
@@ -108,6 +109,7 @@ describe("Project handler function", () => {
       // Both calls should be an object with a single key: "req" or "res"
       expect(log.info.var.mock.calls[0][0]).toHaveProperty("req");
       expect(log.info.var.mock.calls[1][0]).toHaveProperty("res");
+      expect(log.info.var.mock.calls[1][0].res.body).toEqual({ goose: "honk" });
       // The count of keys in each call should be 1
       expect(Object.keys(log.info.var.mock.calls[0][0]).length).toEqual(1);
       expect(Object.keys(log.info.var.mock.calls[1][0]).length).toEqual(1);
