@@ -19,9 +19,7 @@ const MOCK = {
 // Mock modules
 //
 
-jest.mock("../adapters/getCurrentInvokeUuid.adapter", () =>
-  jest.fn(() => "MOCK_UUID")
-);
+jest.mock("../getCurrentInvokeUuid.adapter", () => jest.fn(() => "MOCK_UUID"));
 
 //
 //

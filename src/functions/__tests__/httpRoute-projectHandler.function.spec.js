@@ -21,13 +21,11 @@ afterEach(() => {
 //
 
 const mockProjectHandler = jest.fn();
-jest.mock(
-  "../projectHandler.function",
-  // The function is a factory function
-  () =>
-    (...params) =>
-      mockProjectHandler(...params)
-);
+
+jest.mock("../../modules", () => ({
+  ...jest.requireActual("../../modules"),
+  projectHandler: (...params) => mockProjectHandler(...params),
+}));
 
 //
 //

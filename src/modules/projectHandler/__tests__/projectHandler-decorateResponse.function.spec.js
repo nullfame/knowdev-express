@@ -17,7 +17,7 @@ const MOCK = {
 
 const mockDecorateResponse = jest.fn();
 jest.mock(
-  "../../util/decorateResponse.util",
+  "../decorateResponse.util",
   () =>
     (res, { name = undefined, version = undefined } = {}) => {
       // res.locals = { ...res.locals, name, version }; // This was co-pilot's suggestion but I didn't use it
@@ -47,7 +47,7 @@ afterEach(() => {
 describe("Project handler function", () => {
   let projectHandler;
   beforeEach(() => {
-    projectHandler = require("../projectHandler.function"); // eslint-disable-line global-require
+    projectHandler = require("../projectHandler.module"); // eslint-disable-line global-require
   });
   describe("Passing handler context to decorate response", () => {
     it("Handler name can be passed in", async () => {
