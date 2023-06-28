@@ -17,6 +17,7 @@
     "test:spec:getCurrentInvokeUuid.adapter": "jest ./src/util/adapters/__tests__/getCurrentInvokeUuid.adapter.spec.js",
     "test:spec:httpRoute-projectHandler.function": "jest src/functions/__tests__/httpRoute-projectHandler.function.spec.js",
     "test:spec:httpRoute.function": "jest ./src/functions/__tests__/httpRoute.function.spec.js",
+    "test:spec:index": "jest src/__tests__/index.spec.js",
     "test:spec:projectHandler-decorateResponse.function": "jest src/functions/__tests__/projectHandler-decorateResponse.function.spec.js",
     "test:spec:projectHandler-express.function": "jest src/functions/__tests__/projectHandler-express.function.spec.js",
     "test:spec:projectHandler.function": "jest src/functions/__tests__/projectHandler.function.spec.js",
