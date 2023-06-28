@@ -67,13 +67,19 @@ module.exports = router;
 ``` javascript
 const { projectHandler } = require("@knowdev/express");
 
+const myMiddleware = projectHandler((req, res, next) => {
+    next();
+});
+
 const myRouteHandler = projectHandler((req, res) => {
     const response = { hello: "world" };
     res.json(response);
 });
 
-router.all("*", myRouteHandler);
+router.all("*", myMiddleWare, myRouteHandler);
 ```
+
+💡 Note: because the project is opinionated about returning JSON, the project handler assumes `res.json()` is going to be called,
 
 #### Handler Context
 
@@ -213,6 +219,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v0.5.0: more multi-call safe
 * v0.4.0: httpRoute
 * v0.3.0: Headers, `PROJECT_UNAVAILABLE`
 * v0.2.0: Logging, special echo routes, summarize response
