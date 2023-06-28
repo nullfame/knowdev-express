@@ -13,7 +13,7 @@ const {
 const bodyParser = require("body-parser");
 const express = require("express");
 
-const projectHandler = require("../functions/projectHandler.function");
+const { projectHandler } = require("../modules");
 const summarizeRequest = require("../util/summarizeRequest.util");
 
 const router = express.Router();

@@ -3,7 +3,7 @@ const HTTP = require("@knowdev/http");
 
 const { matchers } = require("jest-json-schema");
 
-const projectHandler = require("../projectHandler.function");
+const projectHandler = require("../projectHandler.module");
 
 //
 //

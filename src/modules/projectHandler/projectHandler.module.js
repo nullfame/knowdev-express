@@ -3,9 +3,9 @@ const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 const log = require("@knowdev/log");
 
-const decorateResponse = require("../util/decorateResponse.util");
-const summarizeRequest = require("../util/summarizeRequest.util");
-const summarizeResponse = require("../util/summarizeResponse.util");
+const decorateResponse = require("./decorateResponse.util");
+const summarizeRequest = require("../../util/summarizeRequest.util");
+const summarizeResponse = require("../../util/summarizeResponse.util");
 
 //
 //

@@ -3,8 +3,8 @@ const log = require("@knowdev/log");
 const express = require("express");
 const request = require("supertest");
 
-const decorateResponse = require("../../util/decorateResponse.util");
-const projectHandler = require("../projectHandler.function");
+const decorateResponse = require("../decorateResponse.util");
+const projectHandler = require("../projectHandler.module");
 
 //
 //
@@ -17,7 +17,7 @@ const projectHandler = require("../projectHandler.function");
 //
 
 // Mock decorate response
-jest.mock("../../util/decorateResponse.util");
+jest.mock("../decorateResponse.util");
 
 //
 //

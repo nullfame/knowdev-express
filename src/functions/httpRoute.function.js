@@ -13,7 +13,7 @@ const {
   UnavailableError,
 } = require("@knowdev/errors");
 
-const projectHandler = require("./projectHandler.function");
+const { projectHandler } = require("../modules");
 
 //
 //
