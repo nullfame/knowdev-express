@@ -4,9 +4,15 @@
 //
 
 function summarizeRequest(req) {
+  // If body is a buffer, convert it to a string
+  let { body } = req;
+  if (Buffer.isBuffer(body)) {
+    body = body.toString();
+  }
+
   return {
     baseUrl: req.baseUrl,
-    body: req.body,
+    body,
     headers: req.headers,
     method: req.method,
     query: req.query,
