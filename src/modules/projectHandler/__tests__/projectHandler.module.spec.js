@@ -57,6 +57,7 @@ jest.mock("../../../util/log.util", () => {
     var: jest.fn((...args) => mockLog("var", ...args)),
     tag: jest.fn(),
     untag: jest.fn(),
+    with: jest.fn(() => log),
   };
   log.trace.var = jest.fn((...args) => mockLog("trace.var", ...args));
   log.debug.var = jest.fn((...args) => mockLog("debug.var", ...args));
@@ -258,6 +259,18 @@ describe("Project handler function", () => {
       expect(mockLog).toHaveBeenCalled();
       expect(log.trace).toHaveBeenCalled();
       expect(log.info.var).toHaveBeenCalled();
+    });
+    it("Tags log handler", () => {
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction, { name: "handler" });
+      const req = {};
+      const res = {
+        on: jest.fn(),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(log.with).toHaveBeenCalled();
+      expect(log.with).toHaveBeenCalledWith("handler", "handler");
     });
   });
 });

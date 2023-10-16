@@ -3,7 +3,7 @@ const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 
 const decorateResponse = require("./decorateResponse.util");
-const log = require("../../util/log.util");
+const logger = require("../../util/log.util");
 const summarizeRequest = require("../../util/summarizeRequest.util");
 const summarizeResponse = require("../../util/summarizeResponse.util");
 
@@ -52,6 +52,9 @@ function projectHandler(
     // Set res.locals if it doesn't exist
     if (!res.locals) res.locals = {};
     if (!res.locals._projectHandler) res.locals._projectHandler = {};
+
+    // logger.with will clone logger with the new tag
+    const log = logger.with("handler", name);
 
     // Set up a local variable to track what we've logged
     if (!req.locals._projectHandler.loggedTraceMode) {
