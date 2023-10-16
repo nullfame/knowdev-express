@@ -7,8 +7,9 @@
   "main": "src/index.js",
   "scripts": {
     "clean": "npm run test:clean",
-    "format": "sort-package-json && eslint --fix",
-    "lint": "eslint",
+    "format": "sort-package-json && eslint --fix .",
+    "format:package": "sort-package-json",
+    "lint": "eslint .",
     "test": "jest src/",
     "test:clean": "rimraf coverage/",
     "test:coverage": "jest --coverage src/",
