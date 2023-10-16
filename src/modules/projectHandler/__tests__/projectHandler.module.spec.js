@@ -3,6 +3,7 @@ const HTTP = require("@knowdev/http");
 
 const { matchers } = require("jest-json-schema");
 
+const log = require("../../../util/log.util");
 const projectHandler = require("../projectHandler.module");
 
 //
@@ -41,6 +42,31 @@ const jsonApiErrorSchema = {
 // Mock modules
 //
 
+// TODO: abstract mocking the log
+
+const mockLog = jest.fn();
+jest.mock("../../../util/log.util", () => {
+  // eslint-disable-next-line no-shadow
+  const log = {
+    trace: jest.fn((...args) => mockLog("trace", ...args)),
+    debug: jest.fn((...args) => mockLog("debug", ...args)),
+    info: jest.fn((...args) => mockLog("info", ...args)),
+    warn: jest.fn((...args) => mockLog("warn", ...args)),
+    error: jest.fn((...args) => mockLog("error", ...args)),
+    fatal: jest.fn((...args) => mockLog("fatal", ...args)),
+    var: jest.fn((...args) => mockLog("var", ...args)),
+    tag: jest.fn(),
+    untag: jest.fn(),
+  };
+  log.trace.var = jest.fn((...args) => mockLog("trace.var", ...args));
+  log.debug.var = jest.fn((...args) => mockLog("debug.var", ...args));
+  log.info.var = jest.fn((...args) => mockLog("info.var", ...args));
+  log.warn.var = jest.fn((...args) => mockLog("warn.var", ...args));
+  log.error.var = jest.fn((...args) => mockLog("error.var", ...args));
+  log.fatal.var = jest.fn((...args) => mockLog("fatal.var", ...args));
+  return log;
+});
+
 //
 //
 // Mock environment
@@ -52,6 +78,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   process.env = DEFAULT_ENV;
+  jest.clearAllMocks();
 });
 
 //
@@ -216,6 +243,21 @@ describe("Project handler function", () => {
       const response = mockResJson.mock.calls[0][0];
       expect(response).toMatchSchema(jsonApiErrorSchema);
       expect(response.errors[0].status).toBe(HTTP.CODE.UNAVAILABLE);
+    });
+  });
+  describe("Logging", () => {
+    it("Logging works", () => {
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const res = {
+        on: jest.fn(),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(mockLog).toHaveBeenCalled();
+      expect(log.trace).toHaveBeenCalled();
+      expect(log.info.var).toHaveBeenCalled();
     });
   });
 });
