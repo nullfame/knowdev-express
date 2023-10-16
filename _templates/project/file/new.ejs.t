@@ -1,5 +1,5 @@
 ---
-to: src/<%= name %>.js
+to: <%= path %>/<%= name %>.js
 ---
 //
 //

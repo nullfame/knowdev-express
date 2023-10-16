@@ -1,7 +1,7 @@
 ---
-to: src/__tests__/<%= name %>.spec.js
+to: <%= path %>/__tests__/<%= name %>.spec.js
 ---
-/* eslint-disable global-require */
+const <%= name %> = require("../<%= name %>");
 
 //
 //
@@ -33,9 +33,8 @@ afterEach(() => {
 
 describe("<%= Name %>", () => {
   it("Works", async () => {
-    const <%= name %> = require("../<%= name %>");
     const response = await <%= name %>();
     console.log("response :>> ", response);
-    expect(response.statusCode).toBe(200);
+    expect(response).not.toBeUndefined();
   });
 });
