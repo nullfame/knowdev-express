@@ -37,6 +37,13 @@ const jsonApiErrorSchema = {
 // Mock constants
 //
 
+const MOCK = {
+  COMMIT: "MOCK_COMMIT",
+  ENV: "MOCK_ENV",
+  INVOKE: "1234abcd-5678-efgh-9012-ijklmnopqrst",
+  PROJECT: "MOCK_PROJECT",
+};
+
 //
 //
 // Mock modules
@@ -67,6 +74,8 @@ jest.mock("../../../util/log.util", () => {
   log.fatal.var = jest.fn((...args) => mockLog("fatal.var", ...args));
   return log;
 });
+
+jest.mock("../getCurrentInvokeUuid.adapter", () => () => MOCK.INVOKE);
 
 //
 //
@@ -271,6 +280,27 @@ describe("Project handler function", () => {
       handler(req, res, next);
       expect(log.with).toHaveBeenCalled();
       expect(log.with).toHaveBeenCalledWith("handler", "handler");
+    });
+    it("Tags environment", () => {
+      process.env.PROJECT_COMMIT = MOCK.COMMIT;
+      process.env.PROJECT_ENV = MOCK.ENV;
+      process.env.PROJECT_KEY = MOCK.PROJECT;
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction, { name: "handler" });
+      const req = {};
+      const res = {
+        on: jest.fn(),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(log.tag).toHaveBeenCalledWith({
+        commit: MOCK.COMMIT,
+        env: MOCK.ENV,
+        invoke: MOCK.INVOKE,
+        project: MOCK.PROJECT,
+        shortInvoke: MOCK.INVOKE.slice(0, 8),
+        version: process.env.npm_package_version,
+      });
     });
   });
 });
