@@ -219,6 +219,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v0.6.0: JSON logging
 * v0.5.0: more multi-call safe
 * v0.4.0: httpRoute
 * v0.3.0: Headers, `PROJECT_UNAVAILABLE`
