@@ -3,9 +3,50 @@ const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 
 const decorateResponse = require("./decorateResponse.util");
-const log = require("../../util/log.util");
+const logger = require("../../util/log.util");
 const summarizeRequest = require("../../util/summarizeRequest.util");
 const summarizeResponse = require("../../util/summarizeResponse.util");
+const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
+
+//
+//
+// Helper Functions
+//
+
+function getEnvironmentTags() {
+  const tags = {};
+
+  // Commit
+  if (process.env.PROJECT_COMMIT) {
+    tags.commit = process.env.PROJECT_COMMIT;
+  }
+
+  // Environment
+  if (process.env.PROJECT_ENV) {
+    tags.env = process.env.PROJECT_ENV;
+  }
+
+  // Invoke
+  const invoke = getCurrentInvokeUuid();
+  if (invoke) {
+    tags.invoke = invoke;
+    // Short invoke is first 8 characters
+    tags.shortInvoke = invoke.slice(0, 8);
+  }
+
+  // Project
+  if (process.env.PROJECT_KEY) {
+    tags.project = process.env.PROJECT_KEY;
+  }
+
+  // Version
+  if (process.env.npm_package_version || process.env.PROJECT_VERSION) {
+    tags.version =
+      process.env.npm_package_version || process.env.PROJECT_VERSION;
+  }
+
+  return tags;
+}
 
 //
 //
@@ -53,9 +94,13 @@ function projectHandler(
     if (!res.locals) res.locals = {};
     if (!res.locals._projectHandler) res.locals._projectHandler = {};
 
+    // logger.with will clone logger with the new tag
+    const log = logger.with("handler", name);
+
     // Set up a local variable to track what we've logged
-    if (!req.locals._projectHandler.loggedTraceMode) {
-      req.locals._projectHandler.loggedTraceMode = true;
+    if (!req.locals._projectHandler.initLogging) {
+      req.locals._projectHandler.initLogging = true;
+      log.tag(getEnvironmentTags());
       log.trace("Project logging in trace mode");
     }
 
