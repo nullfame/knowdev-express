@@ -1,5 +1,4 @@
 const HTTP = require("@knowdev/http");
-const log = require("@knowdev/log");
 const {
   BadGatewayError,
   BadRequestError,
@@ -13,6 +12,7 @@ const {
   UnavailableError,
 } = require("@knowdev/errors");
 
+const log = require("../util/log.util");
 const { projectHandler } = require("../modules");
 
 //

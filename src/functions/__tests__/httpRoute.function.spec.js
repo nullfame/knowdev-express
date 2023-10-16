@@ -1,5 +1,4 @@
 const HTTP = require("@knowdev/http");
-const log = require("@knowdev/log");
 
 const express = require("express");
 const { matchers } = require("jest-json-schema");
@@ -7,6 +6,7 @@ const request = require("supertest");
 
 const httpRoute = require("../httpRoute.function");
 const jsonApiErrorSchema = require("../../etc/jsonApiError.schema");
+const log = require("../../util/log.util");
 
 //
 //

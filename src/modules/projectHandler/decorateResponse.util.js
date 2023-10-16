@@ -1,7 +1,7 @@
 const HTTP = require("@knowdev/http");
-const log = require("@knowdev/log");
 
 const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
+const log = require("../../util/log.util");
 
 //
 //

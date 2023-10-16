@@ -1,9 +1,8 @@
-const log = require("@knowdev/log");
-
 const express = require("express");
 const request = require("supertest");
 
 const decorateResponse = require("../decorateResponse.util");
+const log = require("../../../util/log.util");
 const projectHandler = require("../projectHandler.module");
 
 //

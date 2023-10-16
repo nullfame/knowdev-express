@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
-const log = require("@knowdev/log");
 
 const decorateResponse = require("./decorateResponse.util");
+const log = require("../../util/log.util");
 const summarizeRequest = require("../../util/summarizeRequest.util");
 const summarizeResponse = require("../../util/summarizeResponse.util");
 
