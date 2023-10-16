@@ -116,23 +116,26 @@ router.all(
 
 router.all(
   "*",
-  projectHandler((req, res) => {
-    //
-    //
-    // Setup Response Object
-    //
+  projectHandler(
+    (req, res) => {
+      //
+      //
+      // Setup Response Object
+      //
 
-    const response = {
-      req: summarizeRequest(req),
-    };
+      const response = {
+        req: summarizeRequest(req),
+      };
 
-    //
-    //
-    // Respond as JSON
-    //
+      //
+      //
+      // Respond as JSON
+      //
 
-    res.json(response);
-  })
+      res.json(response);
+    },
+    { name: "echo" }
+  )
 );
 
 //
