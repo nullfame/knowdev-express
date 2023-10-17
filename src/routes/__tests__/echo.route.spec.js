@@ -6,6 +6,7 @@ const { matchers } = require("jest-json-schema");
 const request = require("supertest");
 
 const router = require("../echo.route");
+const log = require("../../util/log.util");
 const jsonApiErrorSchema = require("../../etc/jsonApiError.schema");
 
 //
@@ -44,6 +45,37 @@ const TEST = {
     STRING: "Hello.",
   },
 };
+
+//
+//
+// Mock modules
+//
+
+// TODO: abstract mocking the log
+
+const mockLog = jest.fn();
+jest.mock("../../util/log.util", () => {
+  // eslint-disable-next-line no-shadow
+  const log = {
+    trace: jest.fn((...args) => mockLog("trace", ...args)),
+    debug: jest.fn((...args) => mockLog("debug", ...args)),
+    info: jest.fn((...args) => mockLog("info", ...args)),
+    warn: jest.fn((...args) => mockLog("warn", ...args)),
+    error: jest.fn((...args) => mockLog("error", ...args)),
+    fatal: jest.fn((...args) => mockLog("fatal", ...args)),
+    var: jest.fn((...args) => mockLog("var", ...args)),
+    tag: jest.fn(),
+    untag: jest.fn(),
+    with: jest.fn(() => log),
+  };
+  log.trace.var = jest.fn((...args) => mockLog("trace.var", ...args));
+  log.debug.var = jest.fn((...args) => mockLog("debug.var", ...args));
+  log.info.var = jest.fn((...args) => mockLog("info.var", ...args));
+  log.warn.var = jest.fn((...args) => mockLog("warn.var", ...args));
+  log.error.var = jest.fn((...args) => mockLog("error.var", ...args));
+  log.fatal.var = jest.fn((...args) => mockLog("fatal.var", ...args));
+  return log;
+});
 
 //
 //
@@ -191,6 +223,39 @@ describe("Express Backend", () => {
         // Validate the response
         expect(res.statusCode).toEqual(HTTP.CODE.GATEWAY_TIMEOUT);
         expect(res.body).toMatchSchema(jsonApiErrorSchema);
+      });
+    });
+    describe("Logging routes", () => {
+      it("Standard routes do not log error, fatal, or warning", async () => {
+        await request(route).get("/");
+        expect(log.trace).toHaveBeenCalled();
+        expect(log.error).not.toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).not.toHaveBeenCalled();
+      });
+      it("Logs error", async () => {
+        await request(route).get("/log/error");
+        expect(log.error).toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).not.toHaveBeenCalled();
+      });
+      it("Logs fatal", async () => {
+        await request(route).get("/log/fatal");
+        expect(log.error).not.toHaveBeenCalled();
+        expect(log.fatal).toHaveBeenCalled();
+        expect(log.warn).not.toHaveBeenCalled();
+      });
+      it("Logs warning", async () => {
+        await request(route).get("/log/warn");
+        expect(log.error).not.toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).toHaveBeenCalled();
+      });
+      it("Logs error and warning", async () => {
+        await request(route).get("/log/both");
+        expect(log.error).toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).toHaveBeenCalled();
       });
     });
   });
