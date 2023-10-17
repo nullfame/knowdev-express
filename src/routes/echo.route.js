@@ -34,80 +34,113 @@ router.use(bodyParser.text({ type: "*/*" }));
 
 router.all(
   "/error/400",
-  projectHandler(() => {
-    throw new BadRequestError();
-  })
+  projectHandler(
+    () => {
+      throw new BadRequestError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/401",
-  projectHandler(() => {
-    throw new UnauthorizedError();
-  })
+  projectHandler(
+    () => {
+      throw new UnauthorizedError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/403",
-  projectHandler(() => {
-    throw new ForbiddenError();
-  })
+  projectHandler(
+    () => {
+      throw new ForbiddenError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/404",
-  projectHandler(() => {
-    throw new NotFoundError();
-  })
+  projectHandler(
+    () => {
+      throw new NotFoundError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/418",
-  projectHandler(() => {
-    throw new TeapotError();
-  })
+  projectHandler(
+    () => {
+      throw new TeapotError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/500",
-  projectHandler(() => {
-    throw new InternalError();
-  })
+  projectHandler(
+    () => {
+      throw new InternalError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/502",
-  projectHandler(() => {
-    throw new BadGatewayError();
-  })
+  projectHandler(
+    () => {
+      throw new BadGatewayError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/503",
-  projectHandler(() => {
-    throw new UnavailableError();
-  })
+  projectHandler(
+    () => {
+      throw new UnavailableError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/504",
-  projectHandler(() => {
-    throw new GatewayTimeoutError();
-  })
+  projectHandler(
+    () => {
+      throw new GatewayTimeoutError();
+    },
+    { name: "error" }
+  )
 );
 
 router.all(
   "/error/unhandled",
-  projectHandler(() => {
-    throw new Error("Mock Unhandled Exception");
-  })
+  projectHandler(
+    () => {
+      throw new Error("Mock Unhandled Exception");
+    },
+    { name: "error" }
+  )
 );
 
 // Last error catch all route
 router.all(
   "/error/*",
-  projectHandler(() => {
-    throw new NotFoundError();
-  })
+  projectHandler(
+    () => {
+      throw new NotFoundError();
+    },
+    { name: "error" }
+  )
 );
 
 //
@@ -117,35 +150,47 @@ router.all(
 
 router.all(
   "/log/error",
-  projectHandler((req, res) => {
-    log.error("Logging test error");
-    res.json({ message: "Logged test error" });
-  })
+  projectHandler(
+    (req, res) => {
+      log.error("Logging test error");
+      res.json({ message: "Logged test error" });
+    },
+    { name: "log" }
+  )
 );
 
 router.all(
   "/log/fatal",
-  projectHandler((req, res) => {
-    log.fatal("Logging test fatal");
-    res.json({ message: "Logged test fatal" });
-  })
+  projectHandler(
+    (req, res) => {
+      log.fatal("Logging test fatal");
+      res.json({ message: "Logged test fatal" });
+    },
+    { name: "log" }
+  )
 );
 
 router.all(
   "/log/warn",
-  projectHandler((req, res) => {
-    log.warn("Logging test warn");
-    res.json({ message: "Logged test warn" });
-  })
+  projectHandler(
+    (req, res) => {
+      log.warn("Logging test warn");
+      res.json({ message: "Logged test warn" });
+    },
+    { name: "log" }
+  )
 );
 
 router.all(
   "/log/both",
-  projectHandler((req, res) => {
-    log.warn("Logging test warn");
-    log.error("Logging test error");
-    res.json({ message: "Logged test warn and error" });
-  })
+  projectHandler(
+    (req, res) => {
+      log.warn("Logging test warn");
+      log.error("Logging test error");
+      res.json({ message: "Logged test warn and error" });
+    },
+    { name: "log" }
+  )
 );
 
 //
