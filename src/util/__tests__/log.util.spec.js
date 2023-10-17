@@ -5,10 +5,23 @@ const log = require("../log.util");
 // Mock constants
 //
 
+// eslint-disable-next-line no-unused-vars
+const MOCK = {
+  COMMIT: "MOCK_COMMIT",
+  ENV: "MOCK_ENV",
+  INVOKE: "1234abcd-5678-efgh-9012-ijklmnopqrst",
+  PROJECT: "MOCK_PROJECT",
+};
+
 //
 //
 // Mock modules
 //
+
+jest.mock(
+  "../../modules/projectHandler/getCurrentInvokeUuid.adapter",
+  () => () => "1234abcd-5678-efgh-9012-ijklmnopqrst"
+);
 
 //
 //
