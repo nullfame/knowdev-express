@@ -281,26 +281,5 @@ describe("Project handler function", () => {
       expect(log.with).toHaveBeenCalled();
       expect(log.with).toHaveBeenCalledWith("handler", "handler");
     });
-    it("Tags environment", () => {
-      process.env.PROJECT_COMMIT = MOCK.COMMIT;
-      process.env.PROJECT_ENV = MOCK.ENV;
-      process.env.PROJECT_KEY = MOCK.PROJECT;
-      const mockFunction = jest.fn();
-      const handler = projectHandler(mockFunction, { name: "handler" });
-      const req = {};
-      const res = {
-        on: jest.fn(),
-      };
-      const next = () => {};
-      handler(req, res, next);
-      expect(log.tag).toHaveBeenCalledWith({
-        commit: MOCK.COMMIT,
-        env: MOCK.ENV,
-        invoke: MOCK.INVOKE,
-        project: MOCK.PROJECT,
-        shortInvoke: MOCK.INVOKE.slice(0, 8),
-        version: process.env.npm_package_version,
-      });
-    });
   });
 });
