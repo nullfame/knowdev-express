@@ -14,6 +14,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 
 const { projectHandler } = require("../modules");
+const log = require("../util/log.util");
 const summarizeRequest = require("../util/summarizeRequest.util");
 
 const router = express.Router();
@@ -106,6 +107,44 @@ router.all(
   "/error/*",
   projectHandler(() => {
     throw new NotFoundError();
+  })
+);
+
+//
+//
+// Logging Routes
+//
+
+router.all(
+  "/log/error",
+  projectHandler((req, res) => {
+    log.error("Logging test error");
+    res.json({ message: "Logged test error" });
+  })
+);
+
+router.all(
+  "/log/fatal",
+  projectHandler((req, res) => {
+    log.fatal("Logging test fatal");
+    res.json({ message: "Logged test fatal" });
+  })
+);
+
+router.all(
+  "/log/warn",
+  projectHandler((req, res) => {
+    log.warn("Logging test warn");
+    res.json({ message: "Logged test warn" });
+  })
+);
+
+router.all(
+  "/log/both",
+  projectHandler((req, res) => {
+    log.warn("Logging test warn");
+    log.error("Logging test error");
+    res.json({ message: "Logged test warn and error" });
   })
 );
 

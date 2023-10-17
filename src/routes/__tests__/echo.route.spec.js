@@ -233,9 +233,30 @@ describe("Express Backend", () => {
         expect(log.fatal).not.toHaveBeenCalled();
         expect(log.warn).not.toHaveBeenCalled();
       });
-      it.todo("Logs an error");
-      it.todo("Logs fatal");
-      it.todo("Logs a warning");
+      it("Logs error", async () => {
+        await request(route).get("/log/error");
+        expect(log.error).toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).not.toHaveBeenCalled();
+      });
+      it("Logs fatal", async () => {
+        await request(route).get("/log/fatal");
+        expect(log.error).not.toHaveBeenCalled();
+        expect(log.fatal).toHaveBeenCalled();
+        expect(log.warn).not.toHaveBeenCalled();
+      });
+      it("Logs warning", async () => {
+        await request(route).get("/log/warn");
+        expect(log.error).not.toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).toHaveBeenCalled();
+      });
+      it("Logs error and warning", async () => {
+        await request(route).get("/log/both");
+        expect(log.error).toHaveBeenCalled();
+        expect(log.fatal).not.toHaveBeenCalled();
+        expect(log.warn).toHaveBeenCalled();
+      });
     });
   });
 });
