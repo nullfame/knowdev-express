@@ -47,4 +47,6 @@ describe("Log util", () => {
     expect(log.trace).toBeFunction();
     expect(log.var).toBeFunction();
   });
+  // TODO: Mock new Logger and make sure the tags come through
+  it.todo("Tags environment");
 });
