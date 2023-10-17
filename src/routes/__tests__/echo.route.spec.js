@@ -193,5 +193,10 @@ describe("Express Backend", () => {
         expect(res.body).toMatchSchema(jsonApiErrorSchema);
       });
     });
+    describe("Logging routes", () => {
+      it.todo("Logs an error");
+      it.todo("Logs fatal");
+      it.todo("Logs a warning");
+    });
   });
 });
