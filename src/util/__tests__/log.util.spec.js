@@ -1,4 +1,6 @@
-const log = require("../log.util");
+/* eslint-disable global-require */
+
+const { LOG_FORMAT, LOG_LEVEL } = jest.requireActual("@knowdev/log");
 
 //
 //
@@ -17,6 +19,39 @@ const MOCK = {
 //
 // Mock modules
 //
+
+jest.mock("@knowdev/log", () => {
+  // eslint-disable-next-line no-shadow
+  const log = {
+    trace: jest.fn(),
+    debug: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    fatal: jest.fn(),
+    var: jest.fn(),
+    tag: jest.fn(),
+    untag: jest.fn(),
+    with: jest.fn(() => log),
+  };
+  log.trace.var = jest.fn();
+  log.debug.var = jest.fn();
+  log.info.var = jest.fn();
+  log.warn.var = jest.fn();
+  log.error.var = jest.fn();
+  log.fatal.var = jest.fn();
+  // eslint-disable-next-line no-shadow
+  const { LOG_FORMAT, LOG_LEVEL } = jest.requireActual("@knowdev/log");
+  return {
+    Logger: jest.fn(() => log),
+    LOG_FORMAT: {
+      JSON: LOG_FORMAT.JSON,
+    },
+    LOG_LEVEL: {
+      TRACE: LOG_LEVEL.TRACE,
+    },
+  };
+});
 
 jest.mock(
   "../../modules/projectHandler/getCurrentInvokeUuid.adapter",
@@ -43,10 +78,33 @@ afterEach(() => {
 
 describe("Log util", () => {
   it("Has log.trace and log.var", () => {
-    expect(log).toBeObject();
-    expect(log.trace).toBeFunction();
-    expect(log.var).toBeFunction();
+    const logUtil = require("../log.util"); // eslint-disable-line global-require
+    expect(logUtil).toBeObject();
+    expect(logUtil.trace).toBeFunction();
+    expect(logUtil.var).toBeFunction();
   });
-  // TODO: Mock new Logger and make sure the tags come through
-  it.todo("Tags environment");
+  it("Tags environment", () => {
+    process.env.PROJECT_COMMIT = MOCK.COMMIT;
+    process.env.PROJECT_ENV = MOCK.ENV;
+    process.env.PROJECT_KEY = MOCK.PROJECT;
+    jest.resetModules();
+    // * Resetting the modules means the setup routine of log.util will run again, this time with our env vars
+    // eslint-disable-next-line no-shadow
+    const logPackage = require("@knowdev/log");
+    // Requiring log.util will run the setup routine
+    require("../log.util");
+    expect(logPackage.Logger).toHaveBeenCalled();
+    expect(logPackage.Logger).toHaveBeenCalledWith({
+      format: LOG_FORMAT.JSON,
+      level: LOG_LEVEL.TRACE,
+      tags: {
+        commit: MOCK.COMMIT,
+        env: MOCK.ENV,
+        invoke: MOCK.INVOKE,
+        project: MOCK.PROJECT,
+        shortInvoke: MOCK.INVOKE.slice(0, 8),
+        version: process.env.npm_package_version,
+      },
+    });
+  });
 });
