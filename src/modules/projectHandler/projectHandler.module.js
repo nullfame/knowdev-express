@@ -6,6 +6,50 @@ const decorateResponse = require("./decorateResponse.util");
 const logger = require("../../util/log.util");
 const summarizeRequest = require("../../util/summarizeRequest.util");
 const summarizeResponse = require("../../util/summarizeResponse.util");
+const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
+
+//
+//
+// Helper Functions
+//
+
+// TODO: merge with getEnvironmentTags in log.util.js
+function getEnvironmentTags() {
+  console.log("projectHandler.module: getEnvironmentTags");
+  const tags = {};
+
+  // Commit
+  if (process.env.PROJECT_COMMIT) {
+    tags.commit = process.env.PROJECT_COMMIT;
+  }
+
+  // Environment
+  if (process.env.PROJECT_ENV) {
+    tags.env = process.env.PROJECT_ENV;
+  }
+
+  // Invoke
+  const invoke = getCurrentInvokeUuid();
+  if (invoke) {
+    tags.invoke = invoke;
+    // Short invoke is first 8 characters
+    tags.shortInvoke = invoke.slice(0, 8);
+  }
+
+  // Project
+  if (process.env.PROJECT_KEY) {
+    tags.project = process.env.PROJECT_KEY;
+  }
+
+  // Version
+  if (process.env.npm_package_version || process.env.PROJECT_VERSION) {
+    tags.version =
+      process.env.npm_package_version || process.env.PROJECT_VERSION;
+  }
+
+  console.log("tags :>> ", tags);
+  return tags;
+}
 
 //
 //
@@ -58,7 +102,10 @@ function projectHandler(
 
     // Set up a local variable to track what we've logged
     if (!req.locals._projectHandler.initLogging) {
+      console.log("projectHandler.module: initLogging");
       req.locals._projectHandler.initLogging = true;
+      log.tag(getEnvironmentTags());
+      console.log("WHAT IF I CALLED LOGGER.TAG HERE?");
       log.trace("Project logging in trace mode");
     }
 
