@@ -99,7 +99,7 @@ function projectHandler(
             log.trace("Preparing response");
             res.locals._projectHandler.logResponseBodyJson = json; // Populate our disgusting variable
             res.locals._projectHandler.decoratedResponse = true;
-            decorateResponse(res, { name, version });
+            decorateResponse(res, { handler: name, version });
           }
           log.trace("Sending response");
           res.locals._projectHandler.originalJson.call(res, json); // Call the original res.json()

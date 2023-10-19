@@ -19,9 +19,9 @@ const mockDecorateResponse = jest.fn();
 jest.mock(
   "../decorateResponse.util",
   () =>
-    (res, { name = undefined, version = undefined } = {}) => {
+    (res, { handler = undefined, version = undefined } = {}) => {
       // res.locals = { ...res.locals, name, version }; // This was co-pilot's suggestion but I didn't use it
-      mockDecorateResponse(res, { name, version });
+      mockDecorateResponse(res, { handler, version });
     }
 );
 
@@ -59,7 +59,8 @@ describe("Project handler function", () => {
       handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
-      expect(mockDecorateResponse.mock.calls[0][1].name).toEqual(MOCK.NAME);
+      expect(mockDecorateResponse.mock.calls[0][1]).toContainKey("handler");
+      expect(mockDecorateResponse.mock.calls[0][1].handler).toEqual(MOCK.NAME);
     });
     it("Handler version can be passed in", () => {
       const mockFunction = jest.fn(async (req, res) => res.json({}));
