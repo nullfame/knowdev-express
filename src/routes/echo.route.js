@@ -22,6 +22,19 @@ const router = express.Router();
 
 //
 //
+// Constants
+//
+
+const ROUTE = {
+  NAME: {
+    ECHO: "echo",
+    ERROR: "error",
+    LOG: "log",
+  },
+};
+
+//
+//
 // Middleware
 //
 
@@ -39,7 +52,7 @@ router.all(
     () => {
       throw new BadRequestError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -49,7 +62,7 @@ router.all(
     () => {
       throw new UnauthorizedError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -59,7 +72,7 @@ router.all(
     () => {
       throw new ForbiddenError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -69,7 +82,7 @@ router.all(
     () => {
       throw new NotFoundError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -79,7 +92,7 @@ router.all(
     () => {
       throw new TeapotError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -89,7 +102,7 @@ router.all(
     () => {
       throw new InternalError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -99,7 +112,7 @@ router.all(
     () => {
       throw new BadGatewayError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -109,7 +122,7 @@ router.all(
     () => {
       throw new UnavailableError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -119,7 +132,7 @@ router.all(
     () => {
       throw new GatewayTimeoutError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -129,7 +142,7 @@ router.all(
     () => {
       throw new Error("Mock Unhandled Exception");
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -140,7 +153,7 @@ router.all(
     () => {
       throw new NotFoundError();
     },
-    { name: "error" }
+    { name: ROUTE.NAME.ERROR }
   )
 );
 
@@ -149,6 +162,8 @@ router.all(
 // Logging Routes
 //
 
+// TODO: function to provide logger with handler name
+
 router.all(
   "/log/error",
   projectHandler(
@@ -156,7 +171,7 @@ router.all(
       log.error("Logging test error");
       res.json({ message: "Logged test error" });
     },
-    { name: "log" }
+    { name: ROUTE.NAME.LOG }
   )
 );
 
@@ -167,7 +182,7 @@ router.all(
       log.fatal("Logging test fatal");
       res.json({ message: "Logged test fatal" });
     },
-    { name: "log" }
+    { name: ROUTE.NAME.LOG }
   )
 );
 
@@ -181,7 +196,7 @@ router.all(
       log.warn("Logging test warn");
       res.json({ message: "Logged test warn" });
     },
-    { name: "log" }
+    { name: ROUTE.NAME.LOG }
   )
 );
 
@@ -193,7 +208,7 @@ router.all(
       log.error("Logging test error");
       res.json({ message: "Logged test warn and error" });
     },
-    { name: "log" }
+    { name: ROUTE.NAME.LOG }
   )
 );
 
@@ -222,7 +237,7 @@ router.all(
 
       res.json(response);
     },
-    { name: "echo" }
+    { name: ROUTE.NAME.ECHO }
   )
 );
 
