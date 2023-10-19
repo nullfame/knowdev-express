@@ -50,40 +50,40 @@ describe("Project handler function", () => {
     projectHandler = require("../projectHandler.module"); // eslint-disable-line global-require
   });
   describe("Passing handler context to decorate response", () => {
-    it("Handler name can be passed in", async () => {
+    it("Handler name can be passed in", () => {
       const mockFunction = jest.fn(async (req, res) => res.json({}));
-      const handler = await projectHandler(mockFunction, { name: MOCK.NAME });
+      const handler = projectHandler(mockFunction, { name: MOCK.NAME });
       const req = {};
       const res = new MockExpressResponse();
       const next = () => {};
-      await handler(req, res, next);
+      handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse.mock.calls[0][1].name).toEqual(MOCK.NAME);
     });
-    it("Handler version can be passed in", async () => {
+    it("Handler version can be passed in", () => {
       const mockFunction = jest.fn(async (req, res) => res.json({}));
-      const handler = await projectHandler(mockFunction, {
+      const handler = projectHandler(mockFunction, {
         version: MOCK.VERSION,
       });
       const req = {};
       const res = new MockExpressResponse();
       const next = () => {};
-      await handler(req, res, next);
+      handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse.mock.calls[0][1].version).toEqual(
         MOCK.VERSION
       );
     });
-    it("Handler version can come from the environment", async () => {
+    it("Handler version can come from the environment", () => {
       process.env.PROJECT_VERSION = MOCK.VERSION;
       const mockFunction = jest.fn(async (req, res) => res.json({}));
-      const handler = await projectHandler(mockFunction);
+      const handler = projectHandler(mockFunction);
       const req = {};
       const res = new MockExpressResponse();
       const next = () => {};
-      await handler(req, res, next);
+      handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse.mock.calls[0][1].version).toEqual(
