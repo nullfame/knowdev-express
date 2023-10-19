@@ -24,7 +24,7 @@ describe("@knowdev/express exports", () => {
     const index = require("..");
     expect(index).toBeDefined();
   });
-  describe("", () => {
+  describe("Tests beyond loading", () => {
     let index;
     let projectHandler;
     beforeAll(() => {
