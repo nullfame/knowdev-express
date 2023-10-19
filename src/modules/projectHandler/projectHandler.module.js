@@ -87,6 +87,8 @@ function projectHandler(
   //
 
   return (req, res, ...params) => {
+    // * This is the first line of code that runs when a request is received
+
     // Set req.locals if it doesn't exist
     if (!req.locals) req.locals = {};
     if (!req.locals._projectHandler) req.locals._projectHandler = {};
