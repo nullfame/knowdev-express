@@ -4,6 +4,8 @@ const HTTP = require("@knowdev/http");
 
 console.log("decorateResponse.util.js: require getCurrentInvokeUuid.adapter");
 const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
+
+console.log("decorateResponse.util.js: require log.util");
 const log = require("../../util/log.util");
 
 //

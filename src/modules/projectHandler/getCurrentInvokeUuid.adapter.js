@@ -16,6 +16,7 @@ const { getCurrentInvoke } = require("@vendia/serverless-express");
 function getServerlessExpressUuid() {
   console.log("getCurrentInvokeUuid.adapter.js: getServerlessExpressUuid");
   const currentInvoke = getCurrentInvoke();
+  console.log("currentInvoke :>> ", currentInvoke);
   if (
     currentInvoke &&
     currentInvoke.context &&

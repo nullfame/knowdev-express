@@ -15,6 +15,7 @@ function getEnvironmentTags() {
   const tags = {};
 
   // Commit
+  console.log("process.env.PROJECT_COMMIT :>> ", process.env.PROJECT_COMMIT);
   if (process.env.PROJECT_COMMIT) {
     tags.commit = process.env.PROJECT_COMMIT;
   }
@@ -26,6 +27,7 @@ function getEnvironmentTags() {
 
   // Invoke
   const invoke = getCurrentInvokeUuid();
+  console.log("invoke :>> ", invoke);
   if (invoke) {
     tags.invoke = invoke;
     // Short invoke is first 8 characters
