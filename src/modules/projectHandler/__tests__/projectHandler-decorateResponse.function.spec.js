@@ -72,6 +72,7 @@ describe("Project handler function", () => {
       handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
+      expect(mockDecorateResponse.mock.calls[0][1]).toContainKey("version");
       expect(mockDecorateResponse.mock.calls[0][1].version).toEqual(
         MOCK.VERSION
       );
@@ -86,6 +87,7 @@ describe("Project handler function", () => {
       handler(req, res, next);
       expect(mockFunction).toHaveBeenCalledTimes(1);
       expect(mockDecorateResponse).toHaveBeenCalledTimes(1);
+      expect(mockDecorateResponse.mock.calls[0][1]).toContainKey("version");
       expect(mockDecorateResponse.mock.calls[0][1].version).toEqual(
         MOCK.VERSION
       );
