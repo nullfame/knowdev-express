@@ -38,8 +38,6 @@ const decorateResponse = (res, { handler = "", version = "" } = {}) => {
     //
     // Setup
     //
-    // TODO: here, we should be fully loaded. Where are we getting our logger from?
-    console.log("decorateResponse.util.js: decorateResponse");
     log.trace("Decorating response");
 
     //
