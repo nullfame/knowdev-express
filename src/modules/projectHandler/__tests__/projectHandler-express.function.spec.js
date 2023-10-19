@@ -15,31 +15,7 @@ const projectHandler = require("../projectHandler.module");
 // Mock modules
 //
 
-// TODO: abstract mocking the log
-
-const mockLog = jest.fn();
-jest.mock("../../../util/log.util", () => {
-  // eslint-disable-next-line no-shadow
-  const log = {
-    trace: jest.fn((...args) => mockLog("trace", ...args)),
-    debug: jest.fn((...args) => mockLog("debug", ...args)),
-    info: jest.fn((...args) => mockLog("info", ...args)),
-    warn: jest.fn((...args) => mockLog("warn", ...args)),
-    error: jest.fn((...args) => mockLog("error", ...args)),
-    fatal: jest.fn((...args) => mockLog("fatal", ...args)),
-    var: jest.fn((...args) => mockLog("var", ...args)),
-    tag: jest.fn(),
-    untag: jest.fn(),
-    with: jest.fn(() => log),
-  };
-  log.trace.var = jest.fn((...args) => mockLog("trace.var", ...args));
-  log.debug.var = jest.fn((...args) => mockLog("debug.var", ...args));
-  log.info.var = jest.fn((...args) => mockLog("info.var", ...args));
-  log.warn.var = jest.fn((...args) => mockLog("warn.var", ...args));
-  log.error.var = jest.fn((...args) => mockLog("error.var", ...args));
-  log.fatal.var = jest.fn((...args) => mockLog("fatal.var", ...args));
-  return log;
-});
+jest.mock("../../../util/log.util"); // manually mocked in __mocks__
 
 // Mock decorate response
 jest.mock("../decorateResponse.util");
