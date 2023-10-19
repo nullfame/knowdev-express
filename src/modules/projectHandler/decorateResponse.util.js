@@ -1,6 +1,6 @@
 const HTTP = require("@knowdev/http");
 const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
-const log = require("../../util/log.util");
+const logUtil = require("../../util/log.util");
 
 //
 //
@@ -24,6 +24,8 @@ const log = require("../../util/log.util");
  * @returns
  */
 const decorateResponse = (res, { handler = "", version = "" } = {}) => {
+  const log = logUtil.with({ handler });
+
   //
   //
   // Validate
