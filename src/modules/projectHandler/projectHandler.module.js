@@ -102,10 +102,8 @@ function projectHandler(
 
     // Set up a local variable to track what we've logged
     if (!req.locals._projectHandler.initLogging) {
-      console.log("projectHandler.module: initLogging");
       req.locals._projectHandler.initLogging = true;
       log.tag(getEnvironmentTags());
-      console.log("WHAT IF I CALLED LOGGER.TAG HERE?");
       log.trace("Project logging in trace mode");
     }
 

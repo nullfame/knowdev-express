@@ -1,5 +1,3 @@
-console.log("Entering getCurrentInvokeUuid.adapter.js");
-
 const { getCurrentInvoke } = require("@vendia/serverless-express");
 
 //
@@ -14,10 +12,7 @@ const { getCurrentInvoke } = require("@vendia/serverless-express");
 
 // Adapter for the "@vendia/serverless-express" uuid
 function getServerlessExpressUuid() {
-  // TODO: this is being called both at bootstrap and at runtime
-  console.log("getCurrentInvokeUuid.adapter.js: getServerlessExpressUuid");
   const currentInvoke = getCurrentInvoke();
-  console.log("currentInvoke :>> ", currentInvoke);
   if (
     currentInvoke &&
     currentInvoke.context &&
