@@ -1,5 +1,8 @@
+console.log("Entering decorateResponse.util.js");
+
 const HTTP = require("@knowdev/http");
 
+console.log("decorateResponse.util.js: require getCurrentInvokeUuid.adapter");
 const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
 const log = require("../../util/log.util");
 
@@ -39,6 +42,8 @@ const decorateResponse = (res, { handler = "", version = "" } = {}) => {
     //
     // Setup
     //
+    // TODO: here, log does not have handler, invoke, shortInvoke, or version
+    console.log("decorateResponse.util.js: decorateResponse");
     log.trace("Decorating response");
 
     //

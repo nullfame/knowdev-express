@@ -1,3 +1,5 @@
+console.log("Entering echo.route.js");
+
 const {
   BadRequestError,
   ForbiddenError,
@@ -14,6 +16,8 @@ const bodyParser = require("body-parser");
 const express = require("express");
 
 const { projectHandler } = require("../modules");
+
+console.log("echo.route.js: require log.util");
 const log = require("../util/log.util");
 const summarizeRequest = require("../util/summarizeRequest.util");
 
@@ -174,6 +178,9 @@ router.all(
   "/log/warn",
   projectHandler(
     (req, res) => {
+      console.log("log :>> ", log);
+      console.log("echo.route.js: /log/warn");
+      // TODO: here, log does not have handler, invoke, shortInvoke, or version
       log.warn("Logging test warn");
       res.json({ message: "Logged test warn" });
     },
@@ -227,4 +234,5 @@ router.all(
 // Export
 //
 
+console.log("echo.route.js: module.exports");
 module.exports = router;

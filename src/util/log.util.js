@@ -1,5 +1,8 @@
+console.log("Entering log.util.js");
+
 const { Logger, LOG_FORMAT, LOG_LEVEL } = require("@knowdev/log");
 
+console.log("log.util.js: require getCurrentInvokeUuid.adapter");
 const getCurrentInvokeUuid = require("../modules/projectHandler/getCurrentInvokeUuid.adapter");
 
 //
@@ -8,6 +11,7 @@ const getCurrentInvokeUuid = require("../modules/projectHandler/getCurrentInvoke
 //
 
 function getEnvironmentTags() {
+  console.log("log.util.js: getEnvironmentTags");
   const tags = {};
 
   // Commit
@@ -47,6 +51,7 @@ function getEnvironmentTags() {
 // Logger
 //
 
+console.log("log.util.js: new Logger");
 const log = new Logger({
   format: LOG_FORMAT.JSON,
   level: LOG_LEVEL.TRACE,
