@@ -163,12 +163,15 @@ router.all(
 //
 
 // TODO: function to provide logger with handler name
+function echoRouteLogger() {
+  return log.with({ handler: ROUTE.NAME.LOG });
+}
 
 router.all(
   "/log/error",
   projectHandler(
     (req, res) => {
-      log.error("Logging test error");
+      echoRouteLogger().error("Logging test error");
       res.json({ message: "Logged test error" });
     },
     { name: ROUTE.NAME.LOG }
@@ -179,7 +182,7 @@ router.all(
   "/log/fatal",
   projectHandler(
     (req, res) => {
-      log.fatal("Logging test fatal");
+      echoRouteLogger().fatal("Logging test fatal");
       res.json({ message: "Logged test fatal" });
     },
     { name: ROUTE.NAME.LOG }
@@ -190,10 +193,7 @@ router.all(
   "/log/warn",
   projectHandler(
     (req, res) => {
-      console.log("log :>> ", log);
-      console.log("echo.route.js: /log/warn");
-      // TODO: here, log does not have handler, invoke, shortInvoke, or version
-      log.warn("Logging test warn");
+      echoRouteLogger().warn("Logging test warn");
       res.json({ message: "Logged test warn" });
     },
     { name: ROUTE.NAME.LOG }
@@ -204,8 +204,8 @@ router.all(
   "/log/both",
   projectHandler(
     (req, res) => {
-      log.warn("Logging test warn");
-      log.error("Logging test error");
+      echoRouteLogger().warn("Logging test warn");
+      echoRouteLogger().error("Logging test error");
       res.json({ message: "Logged test warn and error" });
     },
     { name: ROUTE.NAME.LOG }
