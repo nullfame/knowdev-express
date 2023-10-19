@@ -15,7 +15,6 @@ const getCurrentInvokeUuid = require("./getCurrentInvokeUuid.adapter");
 
 // TODO: merge with getEnvironmentTags in log.util.js
 function getEnvironmentTags() {
-  console.log("projectHandler.module: getEnvironmentTags");
   const tags = {};
 
   // Commit
@@ -47,7 +46,6 @@ function getEnvironmentTags() {
       process.env.npm_package_version || process.env.PROJECT_VERSION;
   }
 
-  console.log("tags :>> ", tags);
   return tags;
 }
 

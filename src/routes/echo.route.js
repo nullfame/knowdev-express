@@ -1,5 +1,3 @@
-console.log("Entering echo.route.js");
-
 const {
   BadRequestError,
   ForbiddenError,
@@ -17,7 +15,6 @@ const express = require("express");
 
 const { projectHandler } = require("../modules");
 
-console.log("echo.route.js: require log.util");
 const log = require("../util/log.util");
 const summarizeRequest = require("../util/summarizeRequest.util");
 
@@ -234,5 +231,4 @@ router.all(
 // Export
 //
 
-console.log("echo.route.js: module.exports");
 module.exports = router;

@@ -1,8 +1,4 @@
-console.log("Entering log.util.js");
-
 const { Logger, LOG_FORMAT, LOG_LEVEL } = require("@knowdev/log");
-
-console.log("log.util.js: require getCurrentInvokeUuid.adapter");
 const getCurrentInvokeUuid = require("../modules/projectHandler/getCurrentInvokeUuid.adapter");
 
 //
@@ -15,7 +11,6 @@ function getEnvironmentTags() {
   const tags = {};
 
   // Commit
-  console.log("process.env.PROJECT_COMMIT :>> ", process.env.PROJECT_COMMIT);
   if (process.env.PROJECT_COMMIT) {
     tags.commit = process.env.PROJECT_COMMIT;
   }
@@ -27,7 +22,6 @@ function getEnvironmentTags() {
 
   // Invoke
   const invoke = getCurrentInvokeUuid();
-  console.log("invoke :>> ", invoke);
   if (invoke) {
     tags.invoke = invoke;
     // Short invoke is first 8 characters
