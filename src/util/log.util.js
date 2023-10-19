@@ -3,11 +3,20 @@ const getCurrentInvokeUuid = require("../modules/projectHandler/getCurrentInvoke
 
 //
 //
+// Logger
+//
+
+const log = new Logger({
+  format: LOG_FORMAT.JSON,
+  level: LOG_LEVEL.TRACE,
+});
+
+//
+//
 // Functions
 //
 
-function getEnvironmentTags() {
-  console.log("log.util.js: getEnvironmentTags");
+function init() {
   const tags = {};
 
   // Commit
@@ -39,24 +48,14 @@ function getEnvironmentTags() {
       process.env.npm_package_version || process.env.PROJECT_VERSION;
   }
 
-  return tags;
+  return log.tag(tags); // Currently returning `undefined`
 }
-
-//
-//
-// Logger
-//
-
-console.log("log.util.js: new Logger");
-const log = new Logger({
-  format: LOG_FORMAT.JSON,
-  level: LOG_LEVEL.TRACE,
-  tags: getEnvironmentTags(),
-});
 
 //
 //
 // Export
 //
+
+log.init = init;
 
 module.exports = log;

@@ -50,6 +50,7 @@ jest.mock("@knowdev/log", () => {
     LOG_LEVEL: {
       TRACE: LOG_LEVEL.TRACE,
     },
+    mockFunctions: log,
   };
 });
 
@@ -83,13 +84,9 @@ describe("Log util", () => {
     expect(logUtil.trace).toBeFunction();
     expect(logUtil.var).toBeFunction();
   });
-  it("Tags environment", () => {
-    process.env.PROJECT_COMMIT = MOCK.COMMIT;
-    process.env.PROJECT_ENV = MOCK.ENV;
-    process.env.PROJECT_KEY = MOCK.PROJECT;
+  it("Instantiates a logger when required", () => {
+    // * The logger CANNOT have runtime information
     jest.resetModules();
-    // * Resetting the modules means the setup routine of log.util will run again, this time with our env vars
-    // eslint-disable-next-line no-shadow
     const logPackage = require("@knowdev/log");
     // Requiring log.util will run the setup routine
     require("../log.util");
@@ -97,14 +94,24 @@ describe("Log util", () => {
     expect(logPackage.Logger).toHaveBeenCalledWith({
       format: LOG_FORMAT.JSON,
       level: LOG_LEVEL.TRACE,
-      tags: {
-        commit: MOCK.COMMIT,
-        env: MOCK.ENV,
-        invoke: MOCK.INVOKE,
-        project: MOCK.PROJECT,
-        shortInvoke: MOCK.INVOKE.slice(0, 8),
-        version: process.env.npm_package_version,
-      },
+    });
+  });
+  it("Tags environment on init", () => {
+    process.env.PROJECT_COMMIT = MOCK.COMMIT;
+    process.env.PROJECT_ENV = MOCK.ENV;
+    process.env.PROJECT_KEY = MOCK.PROJECT;
+    jest.resetModules();
+    const logPackage = require("@knowdev/log");
+    const log = require("../log.util");
+    log.init();
+    expect(logPackage.mockFunctions.tag).toHaveBeenCalled();
+    expect(logPackage.mockFunctions.tag).toHaveBeenCalledWith({
+      commit: MOCK.COMMIT,
+      env: MOCK.ENV,
+      invoke: MOCK.INVOKE,
+      project: MOCK.PROJECT,
+      shortInvoke: MOCK.INVOKE.slice(0, 8),
+      version: process.env.npm_package_version,
     });
   });
 });
