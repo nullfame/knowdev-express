@@ -23,7 +23,7 @@ const { projectHandler } = require("../modules");
 const httpRoute = (statusCode = HTTP.CODE.OK, context = {}) => {
   // Give a default name if there isn't one
   if (!context.name) {
-    context.name = "_httpRoute";
+    context.name = "_http";
   }
 
   // Return a function that will be used as an express route

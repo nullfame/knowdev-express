@@ -27,9 +27,9 @@ const router = express.Router();
 
 const ROUTE = {
   NAME: {
-    ECHO: "echo",
-    ERROR: "error",
-    LOG: "log",
+    ECHO: "_echo",
+    ERROR: "_error",
+    LOG: "_log",
   },
 };
 
