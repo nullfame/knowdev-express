@@ -1,5 +1,6 @@
 const index = require("..");
-const { projectHandler } = require("..");
+
+const { projectHandler } = index;
 
 //
 //
@@ -23,7 +24,9 @@ afterEach(() => {
 
 describe("@knowdev/express exports", () => {
   it("Exports projectHandler", () => {
-    expect(index.projectHandler).toBe(projectHandler);
+    expect(projectHandler).toBe(
+      jest.requireActual("../modules/").projectHandler
+    );
     expect(projectHandler).toBeFunction();
   });
   describe("Project handler smoke test", () => {
