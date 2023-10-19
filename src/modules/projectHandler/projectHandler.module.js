@@ -3,7 +3,7 @@ const { UnavailableError, UnhandledError } = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 
 const decorateResponse = require("./decorateResponse.util");
-const logger = require("../../util/log.util");
+const logUtil = require("../../util/log.util");
 const summarizeRequest = require("../../util/summarizeRequest.util");
 const summarizeResponse = require("../../util/summarizeResponse.util");
 
@@ -52,6 +52,8 @@ function projectHandler(
   return (req, res, ...params) => {
     // * This is the first line of code that runs when a request is received
 
+    // Initialization - e.g., logUtil.init()
+
     // Set req.locals if it doesn't exist
     if (!req.locals) req.locals = {};
     if (!req.locals._projectHandler) req.locals._projectHandler = {};
@@ -60,14 +62,20 @@ function projectHandler(
     if (!res.locals) res.locals = {};
     if (!res.locals._projectHandler) res.locals._projectHandler = {};
 
-    // logger.with will clone logger with the new tag
-    const log = logger.with("handler", name);
+    let log;
 
     // Set up a local variable to track what we've logged
     if (!req.locals._projectHandler.initLogging) {
       req.locals._projectHandler.initLogging = true;
-      // log.init();
+      logUtil.init();
+      // logUtil.with will clone logger with the new tag
+      log = logUtil.with("handler", name);
       log.trace("Project logging in trace mode");
+    }
+
+    // In theory it is impossible to get here without a logger
+    if (!log) {
+      log = logUtil.with("handler", name);
     }
 
     try {

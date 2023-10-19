@@ -232,6 +232,17 @@ describe("Project handler function", () => {
     });
   });
   describe("Logging", () => {
+    it("Calls the log init function", () => {
+      const mockFunction = jest.fn();
+      const handler = projectHandler(mockFunction);
+      const req = {};
+      const res = {
+        on: jest.fn(),
+      };
+      const next = () => {};
+      handler(req, res, next);
+      expect(log.init).toHaveBeenCalled();
+    });
     it("Logging works", () => {
       const mockFunction = jest.fn();
       const handler = projectHandler(mockFunction);
