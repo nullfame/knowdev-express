@@ -173,6 +173,10 @@ Responds by echoing back details of your original submission, helpful for debugg
 | `error/504`       | Gateway timeout error |
 | `error/unhandled` | Unhandled error |
 | `error/*`         | Not found error |
+| `log/error`       | Logs error and exits |
+| `log/fatal`       | Logs fatal and exits |
+| `log/warn`        | Logs warn and exits |
+| `log/both`        | Logs warn followed by error and exits |
 
 Note these error routes are in addition to the path you may be using to specify the echo route. If you follow the above example of using `/echo/*`, your full route would be `/echo/error/503`
 
@@ -219,6 +223,9 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v1.0.0: First stable release
+* v0.8.0: Log routes
+* v0.7.0: JSON Tagging
 * v0.6.0: JSON logging
 * v0.5.0: more multi-call safe
 * v0.4.0: httpRoute
