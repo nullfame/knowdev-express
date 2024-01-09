@@ -29,6 +29,7 @@ jest.mock("../getCurrentInvokeUuid.adapter", () => jest.fn(() => "MOCK_UUID"));
 const DEFAULT_ENV = process.env;
 beforeEach(() => {
   process.env = { ...process.env };
+  delete process.env.PROJECT_ENV;
 });
 afterEach(() => {
   process.env = DEFAULT_ENV;
