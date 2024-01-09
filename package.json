@@ -23,8 +23,7 @@
     "test:spec:projectHandler.module:decorateResponse": "jest src/modules/projectHandler/__tests__/projectHandler-decorateResponse.function.spec.js",
     "test:spec:projectHandler.module:express": "jest src/modules/projectHandler/__tests__/projectHandler-express.function.spec.js",
     "test:spec:summarizeRequest.util": "jest src/util/__tests__/summarizeRequest.util.spec.js",
-    "test:spec:util:log.util": "jest ./src/util/__tests__/log.util.spec.js",
-    "postversion": "npm publish"
+    "test:spec:util:log.util": "jest ./src/util/__tests__/log.util.spec.js"
   },
   "dependencies": {
     "@knowdev/errors": "^1.4.0",
