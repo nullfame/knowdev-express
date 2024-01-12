@@ -114,4 +114,17 @@ describe("Log util", () => {
       version: process.env.npm_package_version,
     });
   });
+  it("Respects process.env.LOG_LEVEL", () => {
+    // * The logger CANNOT have runtime information
+    process.env.LOG_LEVEL = LOG_LEVEL.WARN;
+    jest.resetModules();
+    const logPackage = require("@knowdev/log");
+    // Requiring log.util will run the setup routine
+    require("../log.util");
+    expect(logPackage.Logger).toHaveBeenCalled();
+    expect(logPackage.Logger).toHaveBeenCalledWith({
+      format: LOG_FORMAT.JSON,
+      level: LOG_LEVEL.WARN,
+    });
+  });
 });

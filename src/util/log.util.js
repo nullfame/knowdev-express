@@ -8,7 +8,7 @@ const getCurrentInvokeUuid = require("../modules/projectHandler/getCurrentInvoke
 
 const log = new Logger({
   format: LOG_FORMAT.JSON,
-  level: LOG_LEVEL.TRACE,
+  level: process.env.LOG_LEVEL || LOG_LEVEL.TRACE,
 });
 
 //
