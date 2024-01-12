@@ -1,6 +1,6 @@
 {
   "name": "@knowdev/express",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Express on AWS Lambda toolkit",
   "license": "UNLICENSED",
   "author": "Adam Finlayson",
