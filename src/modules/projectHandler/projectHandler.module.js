@@ -68,6 +68,7 @@ function projectHandler(
     if (!req.locals._projectHandler.initLogging) {
       req.locals._projectHandler.initLogging = true;
       logUtil.init();
+      logUtil.tag("handler", name);
       // logUtil.with will clone logger with the new tag
       log = logUtil.with("handler", name);
       log.trace("Project logging in trace mode");
