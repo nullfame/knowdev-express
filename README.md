@@ -223,6 +223,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v1.0.6: Handles async errors
 * v1.0.0: First stable release
 * v0.8.0: Log routes
 * v0.7.0: JSON Tagging
