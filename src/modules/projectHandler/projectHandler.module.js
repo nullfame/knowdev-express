@@ -49,7 +49,7 @@ function projectHandler(
   // Setup
   //
 
-  return (req, res, ...params) => {
+  return async (req, res, ...params) => {
     // * This is the first line of code that runs when a request is received
 
     // Initialization - e.g., logUtil.init()
@@ -136,7 +136,7 @@ function projectHandler(
 
       // Invoke handler
       log.trace(`Handler call {name:${name}}`);
-      handler(req, res, ...params);
+      await handler(req, res, ...params);
       log.trace(`Handler exit {name:${name}}`);
 
       //
