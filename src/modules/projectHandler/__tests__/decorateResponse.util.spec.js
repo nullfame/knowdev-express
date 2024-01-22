@@ -130,6 +130,7 @@ describe("Decorate response util", () => {
         expect(res.get(HTTP.HEADER.PROJECT.KEY)).toEqual(MOCK.KEY);
       });
       it("Does not adds the project key if it is not present", () => {
+        delete process.env.PROJECT_KEY;
         const res = new MockExpressResponse();
         expect(res.get(HTTP.HEADER.PROJECT.KEY)).toBeUndefined();
         decorateResponse(res);
