@@ -22,6 +22,8 @@ const summarizeResponse = require("../../util/summarizeResponse.util");
  * @param {Function} handler
  * @param {Object} options
  * @param {string} options.name
+ * @param {boolean} options.unavailable
+ * @param {Array<Function>} options.validate
  * @returns {Function}
  */
 function projectHandler(
@@ -29,6 +31,7 @@ function projectHandler(
   {
     name = undefined,
     unavailable = envBoolean("PROJECT_UNAVAILABLE", { defaultValue: false }),
+    validate = [],
     version = process.env.PROJECT_VERSION,
   } = {}
 ) {
@@ -132,6 +135,16 @@ function projectHandler(
         );
         log.debug("Intentionally throwing unavailable");
         throw UnavailableError();
+      }
+
+      // Validate
+      if (Array.isArray(validate) && validate.length > 0) {
+        log.trace(`Handler validate`);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const validator of validate) {
+          // eslint-disable-next-line no-await-in-loop
+          await validator(req, res);
+        }
       }
 
       // Invoke handler

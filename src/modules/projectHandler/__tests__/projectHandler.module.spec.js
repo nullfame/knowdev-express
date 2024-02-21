@@ -297,8 +297,49 @@ describe("Project handler function", () => {
   });
   describe("Features", () => {
     describe("Validate", () => {
-      it.todo("Calls validate functions in order");
-      it.todo("Handles any thrown errors");
+      it("Calls validate functions in order", async () => {
+        const mockFunction = jest.fn();
+        const mockValidateOne = jest.fn();
+        const mockValidateTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          validate: [mockValidateOne, mockValidateTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockValidateOne).toHaveBeenCalled();
+        expect(mockValidateTwo).toHaveBeenCalled();
+        expect(mockValidateOne).toHaveBeenCalledBefore(mockValidateTwo);
+        expect(mockValidateOne).toHaveBeenCalledBefore(mockFunction);
+      });
+      it("Handles any thrown errors", async () => {
+        const mockFunction = jest.fn();
+        const mockValidateError = jest.fn(() => {
+          throw new Error("Sorpresa!");
+        });
+        const mockValidateOne = jest.fn();
+        const mockValidateTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          validate: [mockValidateOne, mockValidateError, mockValidateTwo],
+        });
+        const req = {};
+        const res = {
+          json: jest.fn(),
+          on: jest.fn(),
+          status: jest.fn(() => res),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(0);
+        expect(mockValidateOne).toHaveBeenCalled();
+        expect(mockValidateError).toHaveBeenCalled();
+        expect(mockValidateTwo).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
+      });
     });
     describe("Setup", () => {
       it.todo("Calls setup functions in order");
