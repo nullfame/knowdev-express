@@ -430,9 +430,28 @@ describe("Project handler function", () => {
         expect(mockTeardownTwo).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
       });
-      it.todo(
-        "Will call teardown functions even if the handler throws an error"
-      );
+      it("Will call teardown functions even if the handler throws an error", async () => {
+        const mockFunction = jest.fn(() => {
+          throw new Error("Sorpresa!");
+        });
+        const mockTeardownOne = jest.fn();
+        const mockTeardownTwo = jest.fn();
+        mockTeardownOne.taco = 1;
+        mockTeardownTwo.taco = 2;
+        const handler = projectHandler(mockFunction, {
+          teardown: [mockTeardownOne, mockTeardownTwo],
+        });
+        const req = {};
+        const res = {
+          json: jest.fn(),
+          on: jest.fn(),
+          status: jest.fn(() => res),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockTeardownOne).toHaveBeenCalled();
+        expect(mockTeardownTwo).toHaveBeenCalled();
+      });
     });
     describe("Locals", () => {
       it.todo("Populates req.locals");

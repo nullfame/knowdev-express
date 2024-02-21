@@ -164,28 +164,42 @@ function projectHandler(
         }
       }
 
-      // Invoke handler
-      log.trace(`Handler call {name:${name}}`);
-      await handler(req, res, ...params);
-      log.trace(`Handler exit {name:${name}}`);
+      const runtimeErrors = [];
+
+      try {
+        // Invoke handler
+        log.trace(`Handler call {name:${name}}`);
+        await handler(req, res, ...params);
+        log.trace(`Handler exit {name:${name}}`);
+      } catch (error) {
+        log.debug("Caught runtime error in handler");
+        if (error.isProjectError) {
+          runtimeErrors.push(error);
+        } else {
+          log.fatal.var({ unhandledError: error });
+          const responseError = UnhandledError();
+          runtimeErrors.push(responseError);
+        }
+      }
 
       // Teardown
       if (Array.isArray(teardown) && teardown.length > 0) {
         log.trace(`Handler teardown`);
-        const teardownErrors = [];
         // eslint-disable-next-line no-restricted-syntax
         for (const teardownFunction of teardown) {
           try {
             // eslint-disable-next-line no-await-in-loop
             await teardownFunction(req, res);
           } catch (error) {
-            teardownErrors.push(error);
+            log.debug("Caught runtime error in teardown");
+            if (error.isProjectError) {
+              runtimeErrors.push(error);
+            } else {
+              log.fatal.var({ unhandledError: error });
+              const responseError = UnhandledError();
+              runtimeErrors.push(responseError);
+            }
           }
-        }
-        if (teardownErrors.length > 1) {
-          throw MultiError(teardownErrors);
-        } else if (teardownErrors.length === 1) {
-          throw teardownErrors[0];
         }
       }
 
@@ -193,15 +207,20 @@ function projectHandler(
       //
       // Error Handling
       //
+      if (runtimeErrors.length > 1) {
+        throw MultiError(runtimeErrors);
+      } else if (runtimeErrors.length === 1) {
+        throw runtimeErrors[0];
+      }
     } catch (error) {
-      // if project error
+      // if project error (an unhandled project error was logged above)
       if (error.isProjectError) {
         log.trace("Caught ProjectError");
         log.trace.var({ projectError: error });
         res.status(error.status).json(error.json());
       } else {
         // otherwise, respond as unhandled
-        log.trace("Caught unhandled error");
+        log.debug("Caught unhandled error");
         log.fatal.var({ unhandledError: error });
         const responseError = UnhandledError();
         res.status(responseError.status).json(responseError.json());
