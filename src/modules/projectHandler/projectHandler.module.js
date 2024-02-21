@@ -1,5 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-const { UnavailableError, UnhandledError } = require("@knowdev/errors");
+const {
+  MultiError,
+  UnavailableError,
+  UnhandledError,
+} = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 
 const decorateResponse = require("./decorateResponse.util");
@@ -22,13 +26,20 @@ const summarizeResponse = require("../../util/summarizeResponse.util");
  * @param {Function} handler
  * @param {Object} options
  * @param {string} options.name
+ * @param {Array<Function>} options.setup
+ * @param {boolean} options.unavailable
+ * @param {Array<Function>} options.validate
  * @returns {Function}
  */
 function projectHandler(
   handler,
   {
+    locals = {},
     name = undefined,
+    setup = [],
+    teardown = [],
     unavailable = envBoolean("PROJECT_UNAVAILABLE", { defaultValue: false }),
+    validate = [],
     version = process.env.PROJECT_VERSION,
   } = {}
 ) {
@@ -134,29 +145,95 @@ function projectHandler(
         throw UnavailableError();
       }
 
-      // Invoke handler
-      log.trace(`Handler call {name:${name}}`);
-      await handler(req, res, ...params);
-      log.trace(`Handler exit {name:${name}}`);
+      // Validate
+      if (Array.isArray(validate) && validate.length > 0) {
+        log.trace(`Handler validate`);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const validator of validate) {
+          // eslint-disable-next-line no-await-in-loop
+          await validator(req, res);
+        }
+      }
 
-      //
-      //
-      // Postprocess
-      //
+      // Setup
+      if (Array.isArray(setup) && setup.length > 0) {
+        log.trace(`Handler setup`);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const setupFunction of setup) {
+          // eslint-disable-next-line no-await-in-loop
+          await setupFunction(req, res);
+        }
+      }
+
+      // Locals
+      if (Object.keys(locals).length > 0) {
+        log.trace(`Handler locals`);
+        Object.keys(locals).forEach((key) => {
+          if (typeof locals[key] === "function") {
+            req.locals[key] = locals[key](req, res);
+          } else {
+            req.locals[key] = locals[key];
+          }
+        });
+      }
+
+      const runtimeErrors = [];
+
+      try {
+        // Invoke handler
+        log.trace(`Handler call {name:${name}}`);
+        await handler(req, res, ...params);
+        log.trace(`Handler exit {name:${name}}`);
+      } catch (error) {
+        log.debug("Caught runtime error in handler");
+        if (error.isProjectError) {
+          runtimeErrors.push(error);
+        } else {
+          log.fatal.var({ unhandledError: error });
+          const responseError = UnhandledError();
+          runtimeErrors.push(responseError);
+        }
+      }
+
+      // Teardown
+      if (Array.isArray(teardown) && teardown.length > 0) {
+        log.trace(`Handler teardown`);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const teardownFunction of teardown) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await teardownFunction(req, res);
+          } catch (error) {
+            log.debug("Caught runtime error in teardown");
+            if (error.isProjectError) {
+              runtimeErrors.push(error);
+            } else {
+              log.fatal.var({ unhandledError: error });
+              const responseError = UnhandledError();
+              runtimeErrors.push(responseError);
+            }
+          }
+        }
+      }
 
       //
       //
       // Error Handling
       //
+      if (runtimeErrors.length > 1) {
+        throw MultiError(runtimeErrors);
+      } else if (runtimeErrors.length === 1) {
+        throw runtimeErrors[0];
+      }
     } catch (error) {
-      // if project error
+      // if project error (an unhandled project error was logged above)
       if (error.isProjectError) {
         log.trace("Caught ProjectError");
         log.trace.var({ projectError: error });
         res.status(error.status).json(error.json());
       } else {
         // otherwise, respond as unhandled
-        log.trace("Caught unhandled error");
+        log.debug("Caught unhandled error");
         log.fatal.var({ unhandledError: error });
         const responseError = UnhandledError();
         res.status(responseError.status).json(responseError.json());
