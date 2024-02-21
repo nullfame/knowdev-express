@@ -454,8 +454,46 @@ describe("Project handler function", () => {
       });
     });
     describe("Locals", () => {
-      it.todo("Populates req.locals");
-      it.todo("Handles any thrown errors");
+      it("Populates req.locals", async () => {
+        const mockFunction = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          locals: {
+            taco: "TACO",
+            bell: () => "DING!",
+          },
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(req.locals).toContainEntries([
+          ["taco", "TACO"],
+          ["bell", "DING!"],
+        ]);
+      });
+      it("Handles any thrown errors", () => {
+        const mockFunction = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          locals: {
+            taco: "TACO",
+            bell: () => {
+              throw new Error("Sorpresa!");
+            },
+          },
+        });
+        const req = {};
+        const res = {
+          json: jest.fn(),
+          on: jest.fn(),
+          status: jest.fn(() => res),
+        };
+        const next = () => {};
+        handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(0);
+        expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
+      });
     });
   });
 });

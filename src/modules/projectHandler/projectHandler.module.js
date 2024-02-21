@@ -34,6 +34,7 @@ const summarizeResponse = require("../../util/summarizeResponse.util");
 function projectHandler(
   handler,
   {
+    locals = {},
     name = undefined,
     setup = [],
     teardown = [],
@@ -162,6 +163,18 @@ function projectHandler(
           // eslint-disable-next-line no-await-in-loop
           await setupFunction(req, res);
         }
+      }
+
+      // Locals
+      if (Object.keys(locals).length > 0) {
+        log.trace(`Handler locals`);
+        Object.keys(locals).forEach((key) => {
+          if (typeof locals[key] === "function") {
+            req.locals[key] = locals[key](req, res);
+          } else {
+            req.locals[key] = locals[key];
+          }
+        });
       }
 
       const runtimeErrors = [];
