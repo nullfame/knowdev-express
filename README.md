@@ -104,8 +104,12 @@ router.all("*", myRouteHandler);
 
 | Option | Default | Description
 | ------ | ------- | -----------
+| `locals` | `{}` | `req.locals` will be populated to these values, executing any functions
 | `name` | `undefined` | Name used in logging
+| `setup` | `[]` | Functions to run before the handler
+| `teardown` | `[]` | Functions to run after the handler
 | `unavailable` | `false \|\| process.env.PROJECT_UNAVAILABLE` | Throw `503` instead of responding. For unusual maintenance situations only (you're welcome)
+| `validate` | `[]` | Functions to run before the handler, which MUST throw their own errors if they fail
 | `version` | `process.env.PROJECT_VERSION` | Version used in logging
 
 ### Project Headers
@@ -223,6 +227,7 @@ log.var({ res: summarizeResponse(res) })
 
 ## 📝 Changelog
 
+* v1.1.0: Adds `locals`, `setup`, `teardown`, `validate`
 * v1.0.6: Handles async errors
 * v1.0.0: First stable release
 * v0.8.0: Log routes
