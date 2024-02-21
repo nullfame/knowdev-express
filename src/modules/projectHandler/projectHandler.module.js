@@ -1,5 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-const { UnavailableError, UnhandledError } = require("@knowdev/errors");
+const {
+  MultiError,
+  UnavailableError,
+  UnhandledError,
+} = require("@knowdev/errors");
 const { envBoolean } = require("@knowdev/functions");
 
 const decorateResponse = require("./decorateResponse.util");
@@ -32,6 +36,7 @@ function projectHandler(
   {
     name = undefined,
     setup = [],
+    teardown = [],
     unavailable = envBoolean("PROJECT_UNAVAILABLE", { defaultValue: false }),
     validate = [],
     version = process.env.PROJECT_VERSION,
@@ -164,10 +169,25 @@ function projectHandler(
       await handler(req, res, ...params);
       log.trace(`Handler exit {name:${name}}`);
 
-      //
-      //
-      // Postprocess
-      //
+      // Teardown
+      if (Array.isArray(teardown) && teardown.length > 0) {
+        log.trace(`Handler teardown`);
+        const teardownErrors = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const teardownFunction of teardown) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await teardownFunction(req, res);
+          } catch (error) {
+            teardownErrors.push(error);
+          }
+        }
+        if (teardownErrors.length > 1) {
+          throw MultiError(teardownErrors);
+        } else if (teardownErrors.length === 1) {
+          throw teardownErrors[0];
+        }
+      }
 
       //
       //

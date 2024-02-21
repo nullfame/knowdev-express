@@ -387,8 +387,52 @@ describe("Project handler function", () => {
       });
     });
     describe("Teardown", () => {
-      it.todo("Calls teardown functions in order");
-      it.todo("Handles any thrown errors");
+      it("Calls teardown functions in order", async () => {
+        const mockFunction = jest.fn();
+        const mockTeardownOne = jest.fn();
+        const mockTeardownTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          teardown: [mockTeardownOne, mockTeardownTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockTeardownOne).toHaveBeenCalled();
+        expect(mockTeardownTwo).toHaveBeenCalled();
+        expect(mockTeardownOne).toHaveBeenCalledBefore(mockTeardownTwo);
+        expect(mockTeardownOne).toHaveBeenCalledAfter(mockFunction);
+      });
+      it("Calls all functions even on error", async () => {
+        const mockFunction = jest.fn();
+        const mockTeardownError = jest.fn(() => {
+          throw new Error("Sorpresa!");
+        });
+        const mockTeardownOne = jest.fn();
+        const mockTeardownTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          teardown: [mockTeardownOne, mockTeardownError, mockTeardownTwo],
+        });
+        const req = {};
+        const res = {
+          json: jest.fn(),
+          on: jest.fn(),
+          status: jest.fn(() => res),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockTeardownOne).toHaveBeenCalled();
+        expect(mockTeardownError).toHaveBeenCalled();
+        expect(mockTeardownTwo).toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
+      });
+      it.todo(
+        "Will call teardown functions even if the handler throws an error"
+      );
     });
     describe("Locals", () => {
       it.todo("Populates req.locals");
