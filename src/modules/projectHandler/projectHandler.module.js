@@ -22,6 +22,7 @@ const summarizeResponse = require("../../util/summarizeResponse.util");
  * @param {Function} handler
  * @param {Object} options
  * @param {string} options.name
+ * @param {Array<Function>} options.setup
  * @param {boolean} options.unavailable
  * @param {Array<Function>} options.validate
  * @returns {Function}
@@ -30,6 +31,7 @@ function projectHandler(
   handler,
   {
     name = undefined,
+    setup = [],
     unavailable = envBoolean("PROJECT_UNAVAILABLE", { defaultValue: false }),
     validate = [],
     version = process.env.PROJECT_VERSION,
@@ -144,6 +146,16 @@ function projectHandler(
         for (const validator of validate) {
           // eslint-disable-next-line no-await-in-loop
           await validator(req, res);
+        }
+      }
+
+      // Setup
+      if (Array.isArray(setup) && setup.length > 0) {
+        log.trace(`Handler setup`);
+        // eslint-disable-next-line no-restricted-syntax
+        for (const setupFunction of setup) {
+          // eslint-disable-next-line no-await-in-loop
+          await setupFunction(req, res);
         }
       }
 

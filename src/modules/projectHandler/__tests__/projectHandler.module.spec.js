@@ -342,8 +342,49 @@ describe("Project handler function", () => {
       });
     });
     describe("Setup", () => {
-      it.todo("Calls setup functions in order");
-      it.todo("Handles any thrown errors");
+      it("Calls setup functions in order", async () => {
+        const mockFunction = jest.fn();
+        const mockSetupOne = jest.fn();
+        const mockSetupTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          setup: [mockSetupOne, mockSetupTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockSetupOne).toHaveBeenCalled();
+        expect(mockSetupTwo).toHaveBeenCalled();
+        expect(mockSetupOne).toHaveBeenCalledBefore(mockSetupTwo);
+        expect(mockSetupOne).toHaveBeenCalledBefore(mockFunction);
+      });
+      it("Handles any thrown errors", async () => {
+        const mockFunction = jest.fn();
+        const mockSetupError = jest.fn(() => {
+          throw new Error("Sorpresa!");
+        });
+        const mockSetupOne = jest.fn();
+        const mockSetupTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          setup: [mockSetupOne, mockSetupError, mockSetupTwo],
+        });
+        const req = {};
+        const res = {
+          json: jest.fn(),
+          on: jest.fn(),
+          status: jest.fn(() => res),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(0);
+        expect(mockSetupOne).toHaveBeenCalled();
+        expect(mockSetupError).toHaveBeenCalled();
+        expect(mockSetupTwo).not.toHaveBeenCalled();
+        expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
+      });
     });
     describe("Teardown", () => {
       it.todo("Calls teardown functions in order");
