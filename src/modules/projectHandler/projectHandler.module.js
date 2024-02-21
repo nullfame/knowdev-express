@@ -150,8 +150,12 @@ function projectHandler(
         log.trace(`Handler validate`);
         // eslint-disable-next-line no-restricted-syntax
         for (const validator of validate) {
-          // eslint-disable-next-line no-await-in-loop
-          await validator(req, res);
+          if (typeof validator === "function") {
+            // eslint-disable-next-line no-await-in-loop
+            await validator(req, res);
+          } else {
+            log.warn("Skipping non-function in validate array");
+          }
         }
       }
 
@@ -160,8 +164,12 @@ function projectHandler(
         log.trace(`Handler setup`);
         // eslint-disable-next-line no-restricted-syntax
         for (const setupFunction of setup) {
-          // eslint-disable-next-line no-await-in-loop
-          await setupFunction(req, res);
+          if (typeof setupFunction === "function") {
+            // eslint-disable-next-line no-await-in-loop
+            await setupFunction(req, res);
+          } else {
+            log.warn("Skipping non-function in setup array");
+          }
         }
       }
 
@@ -201,8 +209,12 @@ function projectHandler(
         // eslint-disable-next-line no-restricted-syntax
         for (const teardownFunction of teardown) {
           try {
-            // eslint-disable-next-line no-await-in-loop
-            await teardownFunction(req, res);
+            if (typeof teardownFunction === "function") {
+              // eslint-disable-next-line no-await-in-loop
+              await teardownFunction(req, res);
+            } else {
+              log.warn("Skipping non-function in teardown array");
+            }
           } catch (error) {
             log.debug("Caught runtime error in teardown");
             if (error.isProjectError) {

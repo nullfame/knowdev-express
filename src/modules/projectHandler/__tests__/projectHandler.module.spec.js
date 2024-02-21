@@ -340,6 +340,23 @@ describe("Project handler function", () => {
         expect(mockValidateTwo).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
       });
+      it("Will skip any validate functions that are not functions", async () => {
+        const mockFunction = jest.fn();
+        const mockValidateOne = jest.fn();
+        const mockValidateTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          validate: [mockValidateOne, "taco", mockValidateTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockValidateOne).toHaveBeenCalled();
+        expect(mockValidateTwo).toHaveBeenCalled();
+      });
     });
     describe("Setup", () => {
       it("Calls setup functions in order", async () => {
@@ -384,6 +401,23 @@ describe("Project handler function", () => {
         expect(mockSetupError).toHaveBeenCalled();
         expect(mockSetupTwo).not.toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(HTTP.CODE.INTERNAL_ERROR);
+      });
+      it("Will skip any setup functions that are not functions", async () => {
+        const mockFunction = jest.fn();
+        const mockSetupOne = jest.fn();
+        const mockSetupTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          setup: [mockSetupOne, "taco", mockSetupTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        expect(mockSetupOne).toHaveBeenCalled();
+        expect(mockSetupTwo).toHaveBeenCalled();
       });
     });
     describe("Teardown", () => {
@@ -449,6 +483,23 @@ describe("Project handler function", () => {
         };
         const next = () => {};
         await handler(req, res, next);
+        expect(mockTeardownOne).toHaveBeenCalled();
+        expect(mockTeardownTwo).toHaveBeenCalled();
+      });
+      it("Will skip any teardown functions that are not functions", async () => {
+        const mockFunction = jest.fn();
+        const mockTeardownOne = jest.fn();
+        const mockTeardownTwo = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          teardown: [mockTeardownOne, "taco", mockTeardownTwo],
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
         expect(mockTeardownOne).toHaveBeenCalled();
         expect(mockTeardownTwo).toHaveBeenCalled();
       });
