@@ -295,4 +295,22 @@ describe("Project handler function", () => {
       expect(log.with).toHaveBeenCalledWith("handler", "handler");
     });
   });
+  describe("Features", () => {
+    describe("Validate", () => {
+      it.todo("Calls validate functions in order");
+      it.todo("Handles any thrown errors");
+    });
+    describe("Setup", () => {
+      it.todo("Calls setup functions in order");
+      it.todo("Handles any thrown errors");
+    });
+    describe("Teardown", () => {
+      it.todo("Calls teardown functions in order");
+      it.todo("Handles any thrown errors");
+    });
+    describe("Locals", () => {
+      it.todo("Populates req.locals");
+      it.todo("Handles any thrown errors");
+    });
+  });
 });
