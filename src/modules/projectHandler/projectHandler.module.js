@@ -176,13 +176,16 @@ function projectHandler(
       // Locals
       if (Object.keys(locals).length > 0) {
         log.trace(`Handler locals`);
-        Object.keys(locals).forEach((key) => {
+        const keys = Object.keys(locals);
+        for (let i = 0; i < keys.length; i += 1) {
+          const key = keys[i];
           if (typeof locals[key] === "function") {
-            req.locals[key] = locals[key](req, res);
+            // eslint-disable-next-line no-await-in-loop
+            req.locals[key] = await locals[key](req, res);
           } else {
             req.locals[key] = locals[key];
           }
-        });
+        }
       }
 
       const runtimeErrors = [];

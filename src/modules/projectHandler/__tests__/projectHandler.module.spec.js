@@ -524,6 +524,30 @@ describe("Project handler function", () => {
           ["bell", "DING!"],
         ]);
       });
+      it("Populates async req.locals", async () => {
+        const mockFunction = jest.fn();
+        const handler = projectHandler(mockFunction, {
+          locals: {
+            taco: "TACO",
+            bell: async () => {
+              await new Promise((r) => {
+                setTimeout(r, 200);
+              });
+              return "DING!";
+            },
+          },
+        });
+        const req = {};
+        const res = {
+          on: jest.fn(),
+        };
+        const next = () => {};
+        await handler(req, res, next);
+        expect(req.locals).toContainEntries([
+          ["taco", "TACO"],
+          ["bell", "DING!"],
+        ]);
+      });
       it("Handles any thrown errors", () => {
         const mockFunction = jest.fn();
         const handler = projectHandler(mockFunction, {
